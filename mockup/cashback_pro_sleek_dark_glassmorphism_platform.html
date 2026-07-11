@@ -1,0 +1,1553 @@
+<!DOCTYPE html>
+<html lang="vi" class="h-full scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hoàn Tiền Pro - Nền tảng Chiết Khấu Cashback Số 1</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Plus Jakarta Sans Font & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        neonPurple: '#A855F7',
+                        neonGreen: '#22C55E',
+                        darkBg: {
+                            900: '#0B0F19',
+                            950: '#020617',
+                        }
+                    },
+                    boxShadow: {
+                        neonPurpleGlow: '0 0 20px rgba(168, 85, 247, 0.25)',
+                        neonGreenGlow: '0 0 20px rgba(34, 197, 94, 0.25)',
+                        glassGlow: '0 8px 32px 0 rgba(0, 0, 0, 0.37)'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #05070F;
+            color: #F3F4F6;
+        }
+        .font-display {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        /* Custom Glassmorphism styles */
+        .glass-panel {
+            background: rgba(17, 24, 39, 0.65);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+        .glass-panel-heavy {
+            background: rgba(11, 15, 25, 0.9);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+        }
+        .glass-nav {
+            background: rgba(11, 15, 25, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        /* Neon glowing radial elements */
+        .glow-sphere-purple {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(168, 85, 247, 0.18) 0%, rgba(0,0,0,0) 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        .glow-sphere-green {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(34, 197, 94, 0.15) 0%, rgba(0,0,0,0) 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        /* Hide scrollbars but keep functionality */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0B0F19;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(168, 85, 247, 0.4);
+            border-radius: 99px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(168, 85, 247, 0.7);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col relative overflow-x-hidden">
+
+    <!-- Glowing Background Elements -->
+    <div class="glow-sphere-purple top-10 left-[-100px]"></div>
+    <div class="glow-sphere-green top-[50%] right-[-100px]"></div>
+    <div class="glow-sphere-purple bottom-10 left-[30%]"></div>
+
+    <!-- Top Floating Navbar -->
+    <header class="glass-nav fixed top-0 inset-x-0 z-50 h-16 flex items-center justify-between px-6 lg:px-12">
+        <div class="flex items-center gap-3">
+            <a href="#" onclick="switchView('landing')" class="flex items-center gap-2.5 group">
+                <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-tr from-purple-600 to-green-500 text-white shadow-neonPurpleGlow group-hover:scale-105 transition-transform">
+                    <i data-lucide="zap" class="h-5.5 w-5.5 text-white"></i>
+                </div>
+                <div>
+                    <span class="text-lg font-display font-black tracking-tight text-white uppercase flex items-center gap-1">
+                        HOÀN TIỀN <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-green-400">PRO</span>
+                    </span>
+                    <span class="block text-[9px] text-slate-400 font-bold tracking-wider uppercase">Sleek Cashback Engine</span>
+                </div>
+            </a>
+        </div>
+
+        <!-- Dynamic Public Links -->
+        <nav id="public-menu-links" class="hidden md:flex items-center gap-8">
+            <a href="#how-it-works" class="text-sm font-semibold text-slate-300 hover:text-purple-400 transition-colors">Cách Hoạt Động</a>
+            <a href="#partner-section" class="text-sm font-semibold text-slate-300 hover:text-purple-400 transition-colors">Đối Tác Liên Kết</a>
+            <a href="#trust-section" class="text-sm font-semibold text-slate-300 hover:text-purple-400 transition-colors">Bảo Chứng Tin Cậy</a>
+            <a href="#" onclick="showToast('Hãy thử dùng thử tính năng tạo link bên dưới!', 'info')" class="text-sm font-semibold text-slate-300 hover:text-purple-400 transition-colors">Hỗ trợ</a>
+        </nav>
+
+        <!-- Profile / Auth Controls -->
+        <div class="flex items-center gap-4 z-10">
+            <!-- Simulated User Info (Hidden by default, displayed when logged in) -->
+            <div id="logged-user-tag" class="hidden flex items-center gap-3 bg-white/5 border border-white/10 px-3 py-1.5 rounded-xl">
+                <div class="h-6 w-6 rounded-full bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center text-[10px] font-bold text-white uppercase" id="avatar-char">
+                    U
+                </div>
+                <span class="text-xs font-semibold text-slate-200" id="username-display">Thành viên</span>
+            </div>
+
+            <button id="auth-main-btn" onclick="toggleAuthSimulation()" class="relative group overflow-hidden px-5 py-2.5 rounded-xl font-display text-xs font-bold transition-all shadow-neonPurpleGlow bg-gradient-to-r from-purple-600 to-purple-800 text-white hover:opacity-90">
+                <span class="flex items-center gap-1.5">
+                    <i data-lucide="log-in" class="h-4 w-4"></i>
+                    <span id="auth-btn-label">Đăng Nhập</span>
+                </span>
+            </button>
+        </div>
+    </header>
+
+    <!-- VIEW 1: LANDING PAGE -->
+    <main id="view-landing" class="view-section flex-grow pt-24 pb-16 z-10">
+        <!-- Hero Section -->
+        <section class="max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center py-10">
+            <div class="lg:col-span-7 space-y-6">
+                <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold bg-purple-500/10 text-purple-300 border border-purple-500/20 shadow-neonPurpleGlow">
+                    <span class="h-2 w-2 rounded-full bg-purple-400 animate-pulse"></span> Nâng Cấp Trải Nghiệm Hoàn Tiền Cao Cấp
+                </span>
+                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-display font-extrabold tracking-tight text-white leading-tight">
+                    Mua sắm thông minh.<br>
+                    Nhận hoàn tiền lên tới <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-green-400">30%</span> giá trị.
+                </h1>
+                <p class="text-slate-400 text-sm sm:text-base max-w-xl font-normal leading-relaxed">
+                    Hỗ trợ chuyển đổi tự động các liên kết mua sắm thành chiết khấu của riêng bạn. Đối soát tự động, ghi nhận nhanh chóng trong 10 phút, hỗ trợ rút tiền thật 24/7.
+                </p>
+
+                <!-- LIVE DEMO LINK CONVERTER (Landing Page Action Point) -->
+                <div class="glass-panel p-5 rounded-2xl border border-white/10 space-y-3.5 max-w-2xl">
+                    <h3 class="text-xs font-bold text-purple-400 uppercase tracking-widest flex items-center gap-2">
+                        <i data-lucide="zap" class="h-4 w-4 text-green-400"></i> Dùng Thử Chuyển Đổi Nhanh (Trực tiếp)
+                    </h3>
+                    <div class="flex flex-col sm:flex-row gap-2">
+                        <input type="text" id="landing-input-url" placeholder="Dán link Shopee, Lazada, Tiki, TikTok Shop tại đây..." class="flex-grow px-4 py-3 rounded-xl bg-slate-900/80 text-xs border border-white/10 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 placeholder-slate-500 font-mono">
+                        <button onclick="processLandingConvert()" class="bg-gradient-to-r from-purple-600 to-green-500 text-white font-bold px-6 py-3 rounded-xl text-xs whitespace-nowrap transition-all shadow-neonPurpleGlow hover:scale-[1.02]">
+                            Tạo Link Rút Gọn
+                        </button>
+                    </div>
+
+                    <!-- Output block for guest conversions -->
+                    <div id="landing-convert-result" class="hidden border border-purple-500/20 bg-purple-950/10 p-4 rounded-xl space-y-3 animate-fade-in">
+                        <div class="flex items-center justify-between text-xs">
+                            <span class="font-bold text-green-400 uppercase tracking-wider flex items-center gap-1.5">
+                                <i data-lucide="check-circle" class="h-4 w-4 text-green-400"></i> Chuyển Đổi Thành Công!
+                            </span>
+                            <span id="landing-platform-badge" class="bg-slate-800 text-slate-300 px-2 py-0.5 rounded text-[10px] font-bold">SHOPEE</span>
+                        </div>
+                        <div class="flex gap-2">
+                            <input type="text" id="landing-shortened-url" readonly class="flex-grow bg-slate-950 px-3 py-2.5 rounded-lg border border-white/10 text-xs font-mono text-purple-300 focus:outline-none">
+                            <button onclick="copyGuestLink()" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors">Copy Link</button>
+                        </div>
+                        <p class="text-[10px] text-slate-400 leading-relaxed italic">
+                            * Vui lòng <a href="#" onclick="toggleAuthSimulation()" class="text-purple-400 underline font-semibold">Đăng nhập</a> để ghi nhận hoàn tiền từ liên kết này trực tiếp vào tài khoản ngân hàng của bạn.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Side visual elements -->
+            <div class="lg:col-span-5 flex justify-center">
+                <div class="relative w-full max-w-sm">
+                    <div class="absolute inset-0 bg-gradient-to-tr from-purple-600 to-green-500 rounded-3xl filter blur-3xl opacity-20 animate-pulse"></div>
+                    <div class="glass-panel rounded-3xl p-6 relative border border-white/15 space-y-6">
+                        <div class="flex items-center justify-between">
+                            <h3 class="font-display font-bold text-sm text-white">Hỗ Trợ Tức Thì</h3>
+                            <span class="text-[10px] bg-green-500/10 text-green-400 font-bold px-2 py-0.5 rounded-full border border-green-500/20">LIVE</span>
+                        </div>
+                        <!-- Miniature visual statistics -->
+                        <div class="space-y-4">
+                            <div class="flex justify-between items-center bg-white/5 p-3 rounded-xl">
+                                <span class="text-xs text-slate-400">Shopee Affiliate</span>
+                                <span class="text-xs font-extrabold text-green-400">Lên đến 12.5%</span>
+                            </div>
+                            <div class="flex justify-between items-center bg-white/5 p-3 rounded-xl">
+                                <span class="text-xs text-slate-400">TikTok Shop Creator</span>
+                                <span class="text-xs font-extrabold text-green-400">Lên đến 15.0%</span>
+                            </div>
+                            <div class="flex justify-between items-center bg-white/5 p-3 rounded-xl">
+                                <span class="text-xs text-slate-400">Lazada Partner</span>
+                                <span class="text-xs font-extrabold text-green-400">Lên đến 9.8%</span>
+                            </div>
+                        </div>
+                        <div class="pt-2">
+                            <button onclick="toggleAuthSimulation()" class="w-full py-3 bg-white/5 hover:bg-white/10 rounded-xl text-xs font-bold text-purple-300 transition-colors border border-white/10">
+                                Đăng Ký Tài Khoản Miễn Phí
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TRUST LAYER SECTION -->
+        <section id="trust-section" class="border-y border-white/5 bg-slate-950/40 py-16">
+            <div class="max-w-7xl mx-auto px-6 lg:px-12">
+                <div class="text-center max-w-xl mx-auto mb-10">
+                    <span class="text-xs font-bold text-purple-400 uppercase tracking-widest">Sự Tin Tưởng</span>
+                    <h2 class="text-xl sm:text-2xl font-display font-bold text-white mt-1">Con Số Biết Nói Minh Bạch 100%</h2>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                    <div class="glass-panel p-6 rounded-2xl relative">
+                        <span class="text-slate-400 text-xs font-bold uppercase tracking-wider">Đã Hoàn Trả Khách Hàng</span>
+                        <div class="text-3xl sm:text-4xl font-display font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-green-400 mt-2">
+                            12,410,290,000đ
+                        </div>
+                        <p class="text-xs text-slate-500 mt-2">Dòng tiền đối soát thực tế được đối soát trực tiếp từ API của các sàn giao dịch.</p>
+                    </div>
+                    <div class="glass-panel p-6 rounded-2xl relative">
+                        <span class="text-slate-400 text-xs font-bold uppercase tracking-wider">Người Dùng Hoạt Động</span>
+                        <div class="text-3xl sm:text-4xl font-display font-extrabold text-white mt-2">
+                            18,450+
+                        </div>
+                        <p class="text-xs text-slate-500 mt-2">Những người tiêu dùng thông thái đang tối ưu hoá hóa đơn chi tiêu hàng ngày.</p>
+                    </div>
+                    <div class="glass-panel p-6 rounded-2xl relative">
+                        <span class="text-slate-400 text-xs font-bold uppercase tracking-wider">Tổng Đơn Hàng Đối Soát</span>
+                        <div class="text-3xl sm:text-4xl font-display font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-purple-400 mt-2">
+                            450,290+
+                        </div>
+                        <p class="text-xs text-slate-500 mt-2">Tỷ lệ ghi nhận đơn thành công đạt 99.4% thông qua AI liên kết trực tiếp.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PARTNER GRID SECTION -->
+        <section id="partner-section" class="max-w-7xl mx-auto px-6 lg:px-12 py-16">
+            <div class="text-center max-w-xl mx-auto mb-10">
+                <span class="text-xs font-bold text-green-400 uppercase tracking-widest">Danh sách</span>
+                <h2 class="text-xl sm:text-2xl font-display font-bold text-white mt-1">Các Đại Lý Đối Tác Liên Kết</h2>
+            </div>
+            
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <!-- Shopee Card -->
+                <div class="glass-panel p-6 rounded-2xl hover:border-purple-500/50 hover:shadow-neonPurpleGlow transition-all text-center flex flex-col justify-between">
+                    <div>
+                        <div class="h-12 w-12 mx-auto bg-orange-600/20 text-orange-400 rounded-2xl flex items-center justify-center font-extrabold text-xl font-display mb-4">
+                            S
+                        </div>
+                        <h4 class="font-display font-bold text-sm text-white">Shopee Việt Nam</h4>
+                        <span class="block text-xs text-green-400 font-semibold mt-2">Hoàn tối đa 12.5%</span>
+                    </div>
+                    <button onclick="simulateLoginAndOpen('generator')" class="mt-4 w-full py-2 bg-white/5 hover:bg-purple-600 text-white rounded-xl text-xs font-bold transition-all border border-white/5 hover:border-purple-500">
+                        Mua Ngay & Nhận Hoàn Tiền
+                    </button>
+                </div>
+                <!-- Lazada Card -->
+                <div class="glass-panel p-6 rounded-2xl hover:border-purple-500/50 hover:shadow-neonPurpleGlow transition-all text-center flex flex-col justify-between">
+                    <div>
+                        <div class="h-12 w-12 mx-auto bg-blue-600/20 text-blue-400 rounded-2xl flex items-center justify-center font-extrabold text-xl font-display mb-4">
+                            L
+                        </div>
+                        <h4 class="font-display font-bold text-sm text-white">Lazada Việt Nam</h4>
+                        <span class="block text-xs text-green-400 font-semibold mt-2">Hoàn tối đa 9.8%</span>
+                    </div>
+                    <button onclick="simulateLoginAndOpen('generator')" class="mt-4 w-full py-2 bg-white/5 hover:bg-purple-600 text-white rounded-xl text-xs font-bold transition-all border border-white/5 hover:border-purple-500">
+                        Mua Ngay & Nhận Hoàn Tiền
+                    </button>
+                </div>
+                <!-- TikTok Shop Card -->
+                <div class="glass-panel p-6 rounded-2xl hover:border-purple-500/50 hover:shadow-neonPurpleGlow transition-all text-center flex flex-col justify-between">
+                    <div>
+                        <div class="h-12 w-12 mx-auto bg-slate-600/30 text-white rounded-2xl flex items-center justify-center font-extrabold text-xl font-display mb-4">
+                            T
+                        </div>
+                        <h4 class="font-display font-bold text-sm text-white">TikTok Shop</h4>
+                        <span class="block text-xs text-green-400 font-semibold mt-2">Hoàn tối đa 15.0%</span>
+                    </div>
+                    <button onclick="simulateLoginAndOpen('generator')" class="mt-4 w-full py-2 bg-white/5 hover:bg-purple-600 text-white rounded-xl text-xs font-bold transition-all border border-white/5 hover:border-purple-500">
+                        Mua Ngay & Nhận Hoàn Tiền
+                    </button>
+                </div>
+                <!-- Tiki Card -->
+                <div class="glass-panel p-6 rounded-2xl hover:border-purple-500/50 hover:shadow-neonPurpleGlow transition-all text-center flex flex-col justify-between">
+                    <div>
+                        <div class="h-12 w-12 mx-auto bg-sky-600/20 text-sky-400 rounded-2xl flex items-center justify-center font-extrabold text-xl font-display mb-4">
+                            T
+                        </div>
+                        <h4 class="font-display font-bold text-sm text-white">Tiki Việt Nam</h4>
+                        <span class="block text-xs text-green-400 font-semibold mt-2">Hoàn tối đa 8.5%</span>
+                    </div>
+                    <button onclick="simulateLoginAndOpen('generator')" class="mt-4 w-full py-2 bg-white/5 hover:bg-purple-600 text-white rounded-xl text-xs font-bold transition-all border border-white/5 hover:border-purple-500">
+                        Mua Ngay & Nhận Hoàn Tiền
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- HOW IT WORKS SECTION -->
+        <section id="how-it-works" class="bg-slate-950/20 py-16 border-t border-white/5">
+            <div class="max-w-7xl mx-auto px-6 lg:px-12">
+                <div class="text-center max-w-xl mx-auto mb-12">
+                    <span class="text-xs font-bold text-purple-400 uppercase tracking-widest">Quy Trình</span>
+                    <h2 class="text-xl sm:text-2xl font-display font-bold text-white mt-1">3 Bước Để Nhận Chiết Khấu Khủng</h2>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="glass-panel p-6 rounded-2xl space-y-3 border-t border-t-purple-500/20">
+                        <div class="h-8 w-8 bg-purple-600 text-white font-bold rounded-lg flex items-center justify-center text-xs shadow-neonPurpleGlow">1</div>
+                        <h3 class="text-sm font-bold text-white">Sao Chép & Tạo Link</h3>
+                        <p class="text-xs text-slate-400 leading-relaxed">
+                            Sao chép đường dẫn sản phẩm bất kỳ trên Shopee, Lazada... Dán vào công cụ chuyển đổi để mã hóa thành link chiết khấu liên kết của bạn.
+                        </p>
+                    </div>
+                    <div class="glass-panel p-6 rounded-2xl space-y-3 border-t border-t-green-500/20">
+                        <div class="h-8 w-8 bg-green-500 text-white font-bold rounded-lg flex items-center justify-center text-xs shadow-neonGreenGlow">2</div>
+                        <h3 class="text-sm font-bold text-white">Mua Sắm Như Bình Thường</h3>
+                        <p class="text-xs text-slate-400 leading-relaxed">
+                            Bấm vào liên kết và tiến hành thanh toán đơn hàng. Bạn vẫn nhận được trọn vẹn mã khuyến mãi giảm giá, miễn phí vận chuyển gốc từ các sàn.
+                        </p>
+                    </div>
+                    <div class="glass-panel p-6 rounded-2xl space-y-3 border-t border-t-purple-500/20">
+                        <div class="h-8 w-8 bg-purple-600 text-white font-bold rounded-lg flex items-center justify-center text-xs shadow-neonPurpleGlow">3</div>
+                        <h3 class="text-sm font-bold text-white">Nhận Tiền Mặt Về Ví</h3>
+                        <p class="text-xs text-slate-400 leading-relaxed">
+                            Hệ thống tự động ghi nhận hoa hồng sau khi giao hàng thành công. Bạn có thể gửi yêu cầu rút trực tiếp về mọi ngân hàng nội địa bất kỳ lúc nào.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+
+    <!-- VIEW 2: AUTHENTICATED WORKSPACE SHELL -->
+    <div id="view-app-container" class="view-section pt-16 flex-grow hidden z-10 flex flex-col md:flex-row">
+        <!-- Sidebar Navigation -->
+        <aside class="w-full md:w-64 bg-slate-950/80 border-r border-white/5 flex flex-col p-4 md:min-h-[calc(100vh-4rem)]">
+            <div class="space-y-1" id="sidebar-tabs">
+                <!-- Tab: Overview -->
+                <button onclick="switchAppTab('dashboard')" class="app-tab-btn w-full px-4 py-3 rounded-xl text-xs font-bold transition-all flex items-center gap-3 text-slate-400 hover:bg-white/5 hover:text-white" id="tab-dashboard">
+                    <i data-lucide="layout-dashboard" class="h-4.5 w-4.5 text-purple-400"></i>
+                    <span>Tổng quan thu nhập</span>
+                </button>
+                <!-- Tab: Creator Link -->
+                <button onclick="switchAppTab('generator')" class="app-tab-btn w-full px-4 py-3 rounded-xl text-xs font-bold transition-all flex items-center gap-3 text-slate-400 hover:bg-white/5 hover:text-white" id="tab-generator">
+                    <i data-lucide="link" class="h-4.5 w-4.5 text-green-400"></i>
+                    <span>Tạo Link Hoàn Tiền</span>
+                </button>
+                <!-- Tab: Orders -->
+                <button onclick="switchAppTab('orders')" class="app-tab-btn w-full px-4 py-3 rounded-xl text-xs font-bold transition-all flex items-center gap-3 text-slate-400 hover:bg-white/5 hover:text-white" id="tab-orders">
+                    <i data-lucide="shopping-bag" class="h-4.5 w-4.5 text-purple-400"></i>
+                    <span>Lịch sử Đơn hàng</span>
+                </button>
+                <!-- Tab: Withdraw -->
+                <button onclick="switchAppTab('withdraw')" class="app-tab-btn w-full px-4 py-3 rounded-xl text-xs font-bold transition-all flex items-center gap-3 text-slate-400 hover:bg-white/5 hover:text-white" id="tab-withdraw">
+                    <i data-lucide="wallet" class="h-4.5 w-4.5 text-green-400"></i>
+                    <span>Rút tiền tài khoản</span>
+                </button>
+                <!-- Tab: Referrals -->
+                <button onclick="switchAppTab('referrals')" class="app-tab-btn w-full px-4 py-3 rounded-xl text-xs font-bold transition-all flex items-center gap-3 text-slate-400 hover:bg-white/5 hover:text-white" id="tab-referrals">
+                    <i data-lucide="users" class="h-4.5 w-4.5 text-purple-400"></i>
+                    <span>Giới thiệu bạn bè</span>
+                </button>
+                <!-- Tab: Claims -->
+                <button onclick="switchAppTab('claims')" class="app-tab-btn w-full px-4 py-3 rounded-xl text-xs font-bold transition-all flex items-center gap-3 text-slate-400 hover:bg-white/5 hover:text-white" id="tab-claims">
+                    <i data-lucide="alert-circle" class="h-4.5 w-4.5 text-green-400"></i>
+                    <span>Khiếu nại sót đơn</span>
+                </button>
+            </div>
+
+            <!-- Visual sidebar footer info -->
+            <div class="mt-auto pt-6 border-t border-white/5 text-center hidden md:block">
+                <div class="glass-panel p-3 rounded-xl space-y-1.5 border-dashed">
+                    <span class="block text-[10px] text-slate-400">Mã ID Thành Viên:</span>
+                    <span class="block font-mono text-[11px] font-bold text-green-400">PRO-93821</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Dynamic Working Board Content -->
+        <section class="flex-grow p-6 lg:p-8 max-w-7xl mx-auto w-full space-y-6">
+            
+            <!-- Skeleton Loader Wrapper -->
+            <div id="workspace-skeleton" class="space-y-6 animate-pulse hidden">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="h-28 bg-white/5 border border-white/10 rounded-2xl"></div>
+                    <div class="h-28 bg-white/5 border border-white/10 rounded-2xl"></div>
+                    <div class="h-28 bg-white/5 border border-white/10 rounded-2xl"></div>
+                </div>
+                <div class="h-80 bg-white/5 border border-white/10 rounded-2xl"></div>
+            </div>
+
+            <!-- SUB-VIEW: OVERVIEW DASHBOARD -->
+            <div id="sub-view-dashboard" class="app-view space-y-6 hidden">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h2 class="text-xl font-display font-bold text-white flex items-center gap-2">
+                            <i data-lucide="layout-dashboard" class="h-5 w-5 text-purple-400"></i> Tổng quan ví hoàn tiền
+                        </h2>
+                        <p class="text-xs text-slate-400">Theo dõi dòng tiền chiết khấu thực tế được thanh toán và chờ duyệt.</p>
+                    </div>
+                    <button onclick="switchAppTab('withdraw')" class="bg-gradient-to-r from-purple-600 to-green-500 hover:opacity-90 text-white font-bold px-4 py-2 rounded-xl text-xs transition-colors shadow-neonPurpleGlow">
+                        Yêu Cầu Rút Tiền
+                    </button>
+                </div>
+
+                <!-- Financial Balance Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Available balance -->
+                    <div class="glass-panel p-5 rounded-2xl relative border-t-2 border-t-green-500">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <span class="text-[10px] text-slate-400 uppercase tracking-widest font-bold">Số Dư Khả Dụng</span>
+                                <h3 class="text-2xl font-display font-extrabold text-white mt-1" id="dash-avail-bal">0đ</h3>
+                            </div>
+                            <div class="h-8 w-8 bg-green-500/10 rounded-lg flex items-center justify-center text-green-400">
+                                <i data-lucide="check-circle" class="h-5 w-5"></i>
+                            </div>
+                        </div>
+                        <p class="text-[10px] text-slate-500 mt-2">Dòng tiền khả dụng sẵn sàng rút về tài khoản ngân hàng liên kết.</p>
+                    </div>
+                    <!-- Pending balance -->
+                    <div class="glass-panel p-5 rounded-2xl relative border-t-2 border-t-purple-500">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <span class="text-[10px] text-slate-400 uppercase tracking-widest font-bold">Số Dư Chờ Duyệt</span>
+                                <h3 class="text-2xl font-display font-extrabold text-white mt-1" id="dash-pending-bal">0đ</h3>
+                            </div>
+                            <div class="h-8 w-8 bg-purple-500/10 rounded-lg flex items-center justify-center text-purple-400">
+                                <i data-lucide="clock" class="h-5 w-5"></i>
+                            </div>
+                        </div>
+                        <p class="text-[10px] text-slate-500 mt-2">Số tiền chờ kết thúc kỳ hạn đổi trả và đối soát của đại lý sàn.</p>
+                    </div>
+                    <!-- Total earned balance -->
+                    <div class="glass-panel p-5 rounded-2xl relative border-t-2 border-t-blue-500">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <span class="text-[10px] text-slate-400 uppercase tracking-widest font-bold">Tổng Tích Lũy</span>
+                                <h3 class="text-2xl font-display font-extrabold text-white mt-1" id="dash-total-bal">0đ</h3>
+                            </div>
+                            <div class="h-8 w-8 bg-blue-500/10 rounded-lg flex items-center justify-center text-blue-400">
+                                <i data-lucide="award" class="h-5 w-5"></i>
+                            </div>
+                        </div>
+                        <p class="text-[10px] text-slate-500 mt-2">Tất cả khoản tiền chiết khấu đã rút và đang chờ duyệt từ trước đến nay.</p>
+                    </div>
+                </div>
+
+                <!-- Financial Chart flow representation -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                    <div class="lg:col-span-8 glass-panel p-5 rounded-2xl space-y-4">
+                        <div class="flex justify-between items-center pb-3 border-b border-white/5">
+                            <h3 class="text-xs font-bold text-white uppercase tracking-wider">Luồng Quản Lý Tiền Tệ Tăng Trưởng (Bản Đồ Tài Chính)</h3>
+                            <span class="text-[10px] text-slate-400">Cập nhật 1 giờ trước</span>
+                        </div>
+                        <div class="relative h-64 w-full">
+                            <canvas id="financial-flow-chart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Mini side activity feed -->
+                    <div class="lg:col-span-4 glass-panel p-5 rounded-2xl space-y-4 flex flex-col justify-between">
+                        <div class="pb-3 border-b border-white/5">
+                            <h3 class="text-xs font-bold text-white uppercase tracking-wider">Thông báo hoạt động</h3>
+                        </div>
+                        <div class="flex-grow space-y-3.5 overflow-y-auto max-h-56 pr-1">
+                            <div class="flex gap-3 text-xs items-start">
+                                <span class="h-2 w-2 rounded-full bg-green-500 mt-1.5"></span>
+                                <div>
+                                    <p class="text-slate-300 font-semibold">Đã xác nhận thanh toán đơn hàng #ORD-98210</p>
+                                    <span class="text-[10px] text-slate-500">Hôm qua, 15:30</span>
+                                </div>
+                            </div>
+                            <div class="flex gap-3 text-xs items-start">
+                                <span class="h-2 w-2 rounded-full bg-purple-500 mt-1.5"></span>
+                                <div>
+                                    <p class="text-slate-300 font-semibold">Ghi nhận liên kết dán mới từ thiết bị di động</p>
+                                    <span class="text-[10px] text-slate-500">25/06/2026</span>
+                                </div>
+                            </div>
+                            <div class="flex gap-3 text-xs items-start">
+                                <span class="h-2 w-2 rounded-full bg-blue-500 mt-1.5"></span>
+                                <div>
+                                    <p class="text-slate-300 font-semibold">Giải ngân thành công yêu cầu thanh toán #PAY-109</p>
+                                    <span class="text-[10px] text-slate-500">20/06/2026</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="pt-4 border-t border-white/5">
+                            <span class="block text-center text-[10px] text-slate-500 italic">Hệ thống xử lý API tự động 24/7/366</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SUB-VIEW: LINK CREATOR & QR SYSTEM -->
+            <div id="sub-view-generator" class="app-view space-y-6 hidden">
+                <div>
+                    <h2 class="text-xl font-display font-bold text-white flex items-center gap-2">
+                        <i data-lucide="link" class="h-5 w-5 text-green-400"></i> Tạo Liên Kết Rút Gọn Chiết Khấu
+                    </h2>
+                    <p class="text-xs text-slate-400">Dán link sản phẩm gốc để hệ thống tự động băm mã affiliate và QR Code tương thích.</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                    <!-- Generator box input -->
+                    <div class="lg:col-span-8 glass-panel p-6 rounded-2xl space-y-5">
+                        <h3 class="text-xs font-bold text-white uppercase tracking-wider pb-3 border-b border-white/5">
+                            Nhập liên kết tiếp thị
+                        </h3>
+                        <div class="space-y-4">
+                            <div class="space-y-1.5">
+                                <label class="block text-xs text-slate-400 font-medium">Link sản phẩm (Shopee, Lazada, Tiktok Shop, Tiki)</label>
+                                <input type="text" id="app-input-url" placeholder="Nhập hoặc dán link sản phẩm gốc ví dụ: shopee.vn/product_name..." class="w-full px-4 py-3 rounded-xl bg-slate-900 text-xs border border-white/10 text-white focus:outline-none focus:ring-1 focus:ring-purple-500">
+                            </div>
+                            <button onclick="generateUserAffiliateLink()" class="w-full bg-gradient-to-r from-purple-600 to-green-500 text-white font-bold py-3 rounded-xl text-xs transition-all shadow-neonPurpleGlow hover:opacity-95">
+                                Chuyển Đổi Liên Kết Chiết Khấu
+                            </button>
+                        </div>
+
+                        <!-- Full Interactive Result box -->
+                        <div id="app-generator-result" class="hidden border border-green-500/20 bg-green-950/10 p-5 rounded-xl space-y-4 animate-fade-in">
+                            <div class="flex items-center justify-between text-xs">
+                                <span class="font-bold text-green-400 uppercase tracking-wider flex items-center gap-1">
+                                    <i data-lucide="check" class="h-4 w-4"></i> Liên Kết Rút Gọn Sẵn Sàng
+                                </span>
+                                <span id="app-res-platform" class="bg-purple-600 text-white px-2 py-0.5 rounded text-[10px] font-bold uppercase">SHOPEE</span>
+                            </div>
+                            <div class="flex flex-col sm:flex-row gap-2">
+                                <input type="text" id="app-res-url" readonly class="flex-grow bg-slate-950 px-3 py-2.5 rounded-lg border border-white/10 text-xs font-mono text-green-300 focus:outline-none">
+                                <button onclick="copyToClipboard('app-res-url', 'app-copy-btn')" id="app-copy-btn" class="bg-green-500 text-slate-950 px-4 py-2 rounded-lg text-xs font-bold whitespace-nowrap hover:bg-green-600 transition-colors">Copy Link</button>
+                            </div>
+                            
+                            <!-- QR Code & Stats wrapper -->
+                            <div class="flex flex-col sm:flex-row items-center gap-6 pt-4 border-t border-white/5">
+                                <div class="bg-white p-2.5 rounded-xl flex items-center justify-center shadow-lg" id="qr-container">
+                                    <!-- Dynamic QR loaded using free static API -->
+                                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://chieukhau.pro/go/shopee-demo" alt="QR Link Code" id="app-res-qr" class="h-28 w-28">
+                                </div>
+                                <div class="space-y-2 text-xs">
+                                    <p class="text-slate-300 font-semibold">Tải QR Code để quét trực tiếp trên điện thoại</p>
+                                    <p class="text-slate-400 text-[11px] leading-relaxed">
+                                        Mẹo: Bạn có thể chụp lại mã QR này, mở ứng dụng Shopee/Lazada trên di động và quét ảnh để thanh toán nhanh mà vẫn nhận đủ 100% hoàn tiền.
+                                    </p>
+                                    <div class="pt-2 text-[11px] text-green-400 font-bold flex gap-4">
+                                        <span>Tỷ lệ hoàn ước tính: <span id="app-res-rate">12.5%</span></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Side recent link log -->
+                    <div class="lg:col-span-4 glass-panel p-5 rounded-2xl flex flex-col justify-between">
+                        <div class="space-y-4">
+                            <h3 class="text-xs font-bold text-white uppercase tracking-wider pb-3 border-b border-white/5">
+                                Links vừa tạo gần đây
+                            </h3>
+                            <div class="space-y-3 max-h-72 overflow-y-auto pr-1" id="recent-links-container">
+                                <!-- Dynamic links are loaded via script -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SUB-VIEW: DETAILED ORDERS LIST -->
+            <div id="sub-view-orders" class="app-view space-y-6 hidden">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-xl font-display font-bold text-white flex items-center gap-2">
+                            <i data-lucide="shopping-bag" class="h-5 w-5 text-purple-400"></i> Quản Lý Đơn Hàng Đối Soát
+                        </h2>
+                        <p class="text-xs text-slate-400">Lịch sử thống kê đơn hàng được ghi nhận và tính toán chiết khấu.</p>
+                    </div>
+                </div>
+
+                <!-- Filters panel -->
+                <div class="glass-panel p-4 rounded-2xl grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-[10px] text-slate-400 uppercase font-bold mb-1.5">Lọc trạng thái</label>
+                        <select id="filter-order-status" onchange="applyOrdersFilters()" class="w-full bg-slate-900 border border-white/10 rounded-xl text-xs py-2.5 px-3 text-slate-200 focus:outline-none">
+                            <option value="all">Tất cả trạng thái</option>
+                            <option value="Approved">Đã duyệt (Thành công)</option>
+                            <option value="Pending">Chờ đối soát</option>
+                            <option value="Rejected">Bị hủy (Từ chối)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] text-slate-400 uppercase font-bold mb-1.5">Lọc Đại lý Sàn</label>
+                        <select id="filter-order-platform" onchange="applyOrdersFilters()" class="w-full bg-slate-900 border border-white/10 rounded-xl text-xs py-2.5 px-3 text-slate-200 focus:outline-none">
+                            <option value="all">Tất cả sàn liên kết</option>
+                            <option value="Shopee">Shopee Mall</option>
+                            <option value="Lazada">Lazada Plaza</option>
+                            <option value="TikTok">TikTok Shop</option>
+                            <option value="Tiki">Tiki VN</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] text-slate-400 uppercase font-bold mb-1.5">Tìm kiếm đơn hàng</label>
+                        <div class="relative">
+                            <input type="text" id="search-order-id" oninput="applyOrdersFilters()" placeholder="Nhập mã đơn ORD-..." class="w-full bg-slate-900 border border-white/10 rounded-xl text-xs py-2.5 pl-3 pr-10 text-slate-200 focus:outline-none placeholder-slate-500">
+                            <i data-lucide="search" class="absolute right-3 top-2.5 h-4.5 w-4.5 text-slate-500"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Orders Data Table -->
+                <div class="glass-panel rounded-2xl overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs">
+                            <thead>
+                                <tr class="bg-white/5 border-b border-white/5 text-slate-400 font-bold uppercase tracking-wider text-[10px]">
+                                    <th class="p-4">Mã Đơn Hàng</th>
+                                    <th class="p-4">Sàn Đại lý</th>
+                                    <th class="p-4">Giá Trị Gốc</th>
+                                    <th class="p-4">Mức hoàn</th>
+                                    <th class="p-4">Tiền Thực Nhận</th>
+                                    <th class="p-4">Thời Gian Click</th>
+                                    <th class="p-4">Ngày Đối Soát Dự Kiến</th>
+                                    <th class="p-4 text-right">Trạng Thái</th>
+                                </tr>
+                            </thead>
+                            <tbody id="app-orders-tbody" class="divide-y divide-white/5">
+                                <!-- Dynamic rows filled via script -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SUB-VIEW: SERIOUS INTERNET BANKING WITHDRAWAL -->
+            <div id="sub-view-withdraw" class="app-view space-y-6 hidden">
+                <div>
+                    <h2 class="text-xl font-display font-bold text-white flex items-center gap-2">
+                        <i data-lucide="wallet" class="h-5 w-5 text-green-400"></i> Yêu Cầu Thanh Toán & Giải Ngân
+                    </h2>
+                    <p class="text-xs text-slate-400">Lệnh rút tiền được mã hóa cổng Internet Banking trực tiếp bảo mật.</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                    <!-- Serious minimal form -->
+                    <div class="lg:col-span-5 glass-panel p-6 rounded-2xl space-y-6">
+                        <div class="pb-3 border-b border-white/5">
+                            <h3 class="text-xs font-bold text-white uppercase tracking-wider">Thông tin tài khoản thụ hưởng</h3>
+                            <p class="text-[10px] text-slate-400 mt-1">Đảm bảo tên chủ thẻ trùng khớp hoàn toàn với thông tin ngân hàng.</p>
+                        </div>
+
+                        <!-- Balance indicator inside withdraw card -->
+                        <div class="bg-white/5 border border-white/10 p-4 rounded-xl flex justify-between items-center">
+                            <div>
+                                <span class="block text-[10px] text-slate-400">Hạn mức rút khả dụng:</span>
+                                <span class="block font-display font-extrabold text-green-400 text-lg mt-0.5" id="withdraw-bal-indicator">0đ</span>
+                            </div>
+                            <span class="text-[10px] text-slate-500 font-semibold">Tối thiểu: 50,000đ</span>
+                        </div>
+
+                        <div class="space-y-4">
+                            <!-- Bank pick -->
+                            <div class="space-y-1.5">
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase">Ngân hàng nhận tiền</label>
+                                <select id="withdraw-bank" class="w-full bg-slate-900 border border-white/10 rounded-xl text-xs py-2.5 px-3 text-slate-200 focus:outline-none">
+                                    <option value="Vietcombank">Vietcombank (Ngoại Thương Việt Nam)</option>
+                                    <option value="Techcombank">Techcombank (Kỹ Thương Việt Nam)</option>
+                                    <option value="BIDV">BIDV (Đầu tư & Phát triển Việt Nam)</option>
+                                    <option value="MB Bank">MB Bank (Quân Đội)</option>
+                                    <option value="VPBank">VPBank (Thịnh Vượng)</option>
+                                </select>
+                            </div>
+
+                            <!-- Account ID -->
+                            <div class="space-y-1.5">
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase">Số tài khoản</label>
+                                <input type="text" id="withdraw-account" placeholder="Nhập mã số thẻ hoặc số tài khoản..." class="w-full bg-slate-900 border border-white/10 rounded-xl text-xs py-2.5 px-3 text-slate-200 focus:outline-none placeholder-slate-500 font-mono">
+                            </div>
+
+                            <!-- Account Holder -->
+                            <div class="space-y-1.5">
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase">Tên chủ tài khoản (Viết Hoa Không Dấu)</label>
+                                <input type="text" id="withdraw-holder" placeholder="Ví dụ: NGUYEN VAN A" class="w-full bg-slate-900 border border-white/10 rounded-xl text-xs py-2.5 px-3 text-slate-200 focus:outline-none placeholder-slate-500 uppercase font-semibold">
+                            </div>
+
+                            <!-- Amount -->
+                            <div class="space-y-1.5">
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase">Số tiền rút (VND)</label>
+                                <input type="number" id="withdraw-amount" value="50000" class="w-full bg-slate-900 border border-white/10 rounded-xl text-xs py-2.5 px-3 text-green-400 focus:outline-none font-bold">
+                            </div>
+
+                            <button onclick="executeWithdrawSubmit()" class="w-full py-3 bg-gradient-to-r from-purple-600 to-purple-800 text-white rounded-xl text-xs font-bold transition-all shadow-neonPurpleGlow">
+                                Gửi Yêu Cầu Rút Tiền
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Log history withdrawals -->
+                    <div class="lg:col-span-7 glass-panel p-6 rounded-2xl flex flex-col justify-between">
+                        <div class="space-y-4">
+                            <div class="pb-3 border-b border-white/5">
+                                <h3 class="text-xs font-bold text-white uppercase tracking-wider">Lịch sử rút tiền</h3>
+                            </div>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left text-xs">
+                                    <thead>
+                                        <tr class="text-slate-400 font-bold border-b border-white/5 text-[10px] uppercase">
+                                            <th class="pb-2">Ngày Yêu Cầu</th>
+                                            <th class="pb-2">Số Tiền</th>
+                                            <th class="pb-2">Thông Tin Ngân Hàng</th>
+                                            <th class="pb-2 text-right">Trạng Thái</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="withdraw-history-tbody" class="divide-y divide-white/5">
+                                        <!-- Loaded via script dynamically -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SUB-VIEW: REFERRALS AND REWARDS -->
+            <div id="sub-view-referrals" class="app-view space-y-6 hidden">
+                <div>
+                    <h2 class="text-xl font-display font-bold text-white flex items-center gap-2">
+                        <i data-lucide="users" class="h-5 w-5 text-purple-400"></i> Giới Thiệu Bạn Bè - Nhận Thêm Hoa Hồng
+                    </h2>
+                    <p class="text-xs text-slate-400">Chia sẻ liên kết của bạn tới bạn bè để hưởng 5% trên mỗi hóa đơn cashback trọn đời của họ.</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                    <!-- Sharing block -->
+                    <div class="lg:col-span-7 space-y-6">
+                        <!-- Code Share Box -->
+                        <div class="glass-panel p-6 rounded-2xl space-y-4">
+                            <h3 class="text-xs font-bold text-white uppercase tracking-wider pb-3 border-b border-white/5">
+                                Hộp chia sẻ liên kết giới thiệu
+                            </h3>
+                            <div class="flex gap-2">
+                                <input type="text" id="ref-share-url" readonly value="https://chieukhau.pro/register?ref=PRO-93821" class="flex-grow bg-slate-950 px-3 py-2.5 rounded-lg border border-white/10 text-xs font-mono text-purple-300 focus:outline-none">
+                                <button onclick="copyToClipboard('ref-share-url', 'ref-copy-btn')" id="ref-copy-btn" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors">Copy Link</button>
+                            </div>
+                            <div class="flex items-center gap-3 pt-2">
+                                <span class="text-[11px] text-slate-400">Chia sẻ nhanh:</span>
+                                <button onclick="showToast('Mở cổng liên kết Zalo...', 'info')" class="px-3 py-1.5 bg-blue-600/20 border border-blue-500/20 rounded-lg text-[10px] text-blue-400 font-bold">Zalo</button>
+                                <button onclick="showToast('Mở cổng liên kết Facebook...', 'info')" class="px-3 py-1.5 bg-indigo-600/20 border border-indigo-500/20 rounded-lg text-[10px] text-indigo-400 font-bold">Facebook</button>
+                            </div>
+                        </div>
+
+                        <!-- Referred List -->
+                        <div class="glass-panel p-6 rounded-2xl space-y-4">
+                            <h3 class="text-xs font-bold text-white uppercase tracking-wider pb-3 border-b border-white/5">
+                                Danh sách bạn bè đã tham gia
+                            </h3>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left text-xs">
+                                    <thead>
+                                        <tr class="text-slate-400 font-bold border-b border-white/5 text-[10px] uppercase">
+                                            <th class="pb-2">Tên Thành Viên</th>
+                                            <th class="pb-2">Ngày Tham Gia</th>
+                                            <th class="pb-2">Trạng Thái</th>
+                                            <th class="pb-2 text-right">Hoa hồng tích lũy</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-white/5" id="referrals-tbody">
+                                        <!-- Loaded via script -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Statistics Cards -->
+                    <div class="lg:col-span-5 space-y-6">
+                        <div class="glass-panel p-5 rounded-2xl relative border-t-2 border-t-purple-500">
+                            <span class="text-slate-400 text-xs font-bold uppercase tracking-wider">Tổng số bạn bè mời thành công</span>
+                            <div class="text-4xl font-display font-extrabold text-white mt-2" id="ref-total-friends">12 người</div>
+                            <p class="text-xs text-slate-500 mt-2">Dữ liệu được cập nhật thời gian thực khi bạn bè hoàn tất đăng ký tài khoản qua liên kết giới thiệu.</p>
+                        </div>
+                        <div class="glass-panel p-5 rounded-2xl relative border-t-2 border-t-green-500">
+                            <span class="text-slate-400 text-xs font-bold uppercase tracking-wider">Tổng hoa hồng nhận về</span>
+                            <div class="text-4xl font-display font-extrabold text-green-400 mt-2" id="ref-total-commissions">54,000đ</div>
+                            <p class="text-xs text-slate-500 mt-2">Được kết toán cộng dồn trực tiếp vào số dư ví khả dụng của bạn ngay khi đơn hàng của họ được đối soát thành công.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SUB-VIEW: CLAIM MISSING CASHBACK -->
+            <div id="sub-view-claims" class="app-view space-y-6 hidden">
+                <div>
+                    <h2 class="text-xl font-display font-bold text-white flex items-center gap-2">
+                        <i data-lucide="alert-circle" class="h-5 w-5 text-green-400"></i> Khiếu Nại Đơn Hàng Bị Sót
+                    </h2>
+                    <p class="text-xs text-slate-400">Trong trường hợp đơn hàng đã mua quá 30 phút không hiển thị trạng thái chờ duyệt, vui lòng điền thông tin sau.</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                    <!-- Form Claim Submission -->
+                    <div class="lg:col-span-5 glass-panel p-6 rounded-2xl space-y-5">
+                        <h3 class="text-xs font-bold text-white uppercase tracking-wider pb-3 border-b border-white/5">
+                            Gửi yêu cầu đối soát thủ công
+                        </h3>
+
+                        <div class="space-y-4">
+                            <!-- Platform choose -->
+                            <div class="space-y-1.5">
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase">Sàn mua sắm</label>
+                                <select id="claim-platform" class="w-full bg-slate-900 border border-white/10 rounded-xl text-xs py-2.5 px-3 text-slate-200 focus:outline-none">
+                                    <option value="Shopee">Shopee Mall</option>
+                                    <option value="Lazada">Lazada Plaza</option>
+                                    <option value="TikTok">TikTok Shop</option>
+                                    <option value="Tiki">Tiki VN</option>
+                                </select>
+                            </div>
+
+                            <!-- Order ID -->
+                            <div class="space-y-1.5">
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase">Mã Đơn Hàng Thực Tế</label>
+                                <input type="text" id="claim-order-id" placeholder="Lấy mã trên ứng dụng Shopee/Lazada (ví dụ: 129038102)" class="w-full bg-slate-900 border border-white/10 rounded-xl text-xs py-2.5 px-3 text-slate-200 focus:outline-none placeholder-slate-500 font-mono">
+                            </div>
+
+                            <!-- Payment Cost -->
+                            <div class="space-y-1.5">
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase">Tổng số tiền thanh toán (VND)</label>
+                                <input type="number" id="claim-value" placeholder="Ví dụ: 350000" class="w-full bg-slate-900 border border-white/10 rounded-xl text-xs py-2.5 px-3 text-slate-200 focus:outline-none font-bold">
+                            </div>
+
+                            <!-- Screen Capture File mock -->
+                            <div class="space-y-1.5">
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase">Ảnh chụp màn hình đơn hàng đã giao</label>
+                                <div class="border border-dashed border-white/15 rounded-xl p-4 text-center cursor-pointer hover:bg-white/5 transition-all" onclick="triggerMockUpload()">
+                                    <i data-lucide="image" class="h-6 w-6 mx-auto text-slate-400 mb-2"></i>
+                                    <span class="block text-[11px] text-slate-400" id="claim-file-label">Nhấp vào đây để tải ảnh lên (PNG, JPG)</span>
+                                    <input type="file" id="mock-file-input" class="hidden" onchange="handleMockFileSelect(event)">
+                                </div>
+                            </div>
+
+                            <button onclick="submitClaimRequest()" class="w-full py-3 bg-gradient-to-r from-green-500 to-purple-600 text-white rounded-xl text-xs font-bold transition-all shadow-neonGreenGlow">
+                                Gửi Yêu Cầu Tra Soát
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Historic Claims Log -->
+                    <div class="lg:col-span-7 glass-panel p-6 rounded-2xl flex flex-col justify-between">
+                        <div class="space-y-4">
+                            <div class="pb-3 border-b border-white/5">
+                                <h3 class="text-xs font-bold text-white uppercase tracking-wider">Lịch sử gửi khiếu nại của bạn</h3>
+                            </div>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left text-xs">
+                                    <thead>
+                                        <tr class="text-slate-400 font-bold border-b border-white/5 text-[10px] uppercase">
+                                            <th class="pb-2">Sàn</th>
+                                            <th class="pb-2">Mã Đơn Hàng</th>
+                                            <th class="pb-2">Tổng Tiền</th>
+                                            <th class="pb-2">Tệp Minh Chứng</th>
+                                            <th class="pb-2 text-right">Trạng Thái</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="claims-history-tbody" class="divide-y divide-white/5">
+                                        <!-- Loaded via script dynamically -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </div>
+
+    <!-- Floating system toasts notifications container -->
+    <div id="toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2.5 max-w-sm w-full pointer-events-none"></div>
+
+    <!-- Premium Footer -->
+    <footer class="bg-slate-950/80 border-t border-white/5 text-slate-400 py-12 mt-auto z-10">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div class="space-y-3">
+                <div class="flex items-center gap-2">
+                    <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-tr from-purple-500 to-green-500 text-white shadow-neonPurpleGlow">
+                        <i data-lucide="zap" class="h-4.5 w-4.5"></i>
+                    </div>
+                    <span class="text-sm font-display font-black text-white uppercase">Hoàn Tiền <span class="text-purple-400">Pro</span></span>
+                </div>
+                <p class="text-xs leading-relaxed text-slate-500">
+                    Hệ thống chuyển đổi liên kết chiết khấu tự động, hỗ trợ tối đa hóa tích lũy dòng tiền chi tiêu từ các cổng thương mại điện tử lớn nhất Việt Nam.
+                </p>
+            </div>
+            <div>
+                <h5 class="text-xs font-bold text-white uppercase tracking-wider mb-3">Tính Năng</h5>
+                <ul class="space-y-2 text-xs text-slate-400">
+                    <li><a href="#" onclick="switchView('landing')" class="hover:text-purple-400 transition-colors">Dán Link Rút Gọn</a></li>
+                    <li><a href="#" onclick="simulateLoginAndOpen('dashboard')" class="hover:text-purple-400 transition-colors">Ví Hoàn Tiền</a></li>
+                    <li><a href="#" onclick="simulateLoginAndOpen('withdraw')" class="hover:text-purple-400 transition-colors">Rút Tiền 24/7</a></li>
+                </ul>
+            </div>
+            <div>
+                <h5 class="text-xs font-bold text-white uppercase tracking-wider mb-3">Đại Lý Liên Kết</h5>
+                <ul class="space-y-2 text-xs text-slate-500">
+                    <li>Shopee Affiliate</li>
+                    <li>Lazada Partner Network</li>
+                    <li>TikTok Shop Creator Platform</li>
+                    <li>Tiki Affiliate</li>
+                </ul>
+            </div>
+            <div>
+                <h5 class="text-xs font-bold text-white uppercase tracking-wider mb-3">Liên Hệ Hợp Tác</h5>
+                <p class="text-xs text-slate-500 leading-relaxed">Mọi ý kiến đóng góp hoặc thắc mắc kỹ thuật vui lòng gửi về hòm thư:</p>
+                <p class="text-xs text-green-400 font-semibold mt-1">support@hoantienpro.io</p>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto px-6 lg:px-12 mt-8 pt-6 border-t border-white/5 text-center text-[10px] text-slate-500">
+            <p>&copy; 2026 Hoàn Tiền Pro - Sandbox Concept UI/UX Demo. Tất cả giao dịch và thống kê đều được giả lập mượt mà.</p>
+        </div>
+    </footer>
+
+
+    <!-- JavaScript Application State Controller -->
+    <script>
+        // Init Lucide Icons
+        lucide.createIcons();
+
+        // ----------------- GLOBAL APPLICATION STATE -----------------
+        let isLoggedIn = false;
+        let currentView = 'landing'; // 'landing' | 'app'
+        let currentAppTab = 'dashboard'; // 'dashboard' | 'generator' | 'orders' | 'withdraw' | 'referrals' | 'claims'
+
+        // Wallet balances
+        let availableBalance = 2450000;
+        let pendingBalance = 820000;
+        let totalEarned = 14850000;
+
+        // Mock Recent Created Link Database
+        const recentCreatedLinks = [
+            { id: 1, platform: 'Shopee', original: 'shopee.vn/product-apple-iphone-15', shortUrl: 'chieukhau.pro/go/shp-ip15', rate: '12.5%', date: 'Mới đây' },
+            { id: 2, platform: 'TikTok', original: 'tiktok.com/shop/cosmetic-cream-abc', shortUrl: 'chieukhau.pro/go/tt-abc', rate: '15.0%', date: '25/06/2026' },
+            { id: 3, platform: 'Lazada', original: 'lazada.vn/men-perfume-luxury-xyz', shortUrl: 'chieukhau.pro/go/lz-xyz', rate: '9.8%', date: '20/06/2026' }
+        ];
+
+        // Mock Orders Database
+        const initialOrdersDatabase = [
+            { id: "ORD-98210", platform: "Shopee", value: 1250000, rate: "12.5%", comm: 156250, clickTime: "26/06/2026 - 15:30", auditDate: "10/07/2026", status: "Approved" },
+            { id: "ORD-84102", platform: "TikTok", value: 450000, rate: "15.0%", comm: 67500, clickTime: "25/06/2026 - 10:15", auditDate: "09/07/2026", status: "Pending" },
+            { id: "ORD-73920", platform: "Lazada", value: 3400000, rate: "9.8%", comm: 333200, clickTime: "24/06/2026 - 19:45", auditDate: "08/07/2026", status: "Approved" },
+            { id: "ORD-20194", platform: "TikTok", value: 590000, rate: "15.0%", comm: 88500, clickTime: "20/06/2026 - 11:20", auditDate: "04/07/2026", status: "Pending" },
+            { id: "ORD-11029", platform: "Tiki", value: 11200000, rate: "8.5%", comm: 952000, clickTime: "18/06/2026 - 08:30", auditDate: "02/07/2026", status: "Approved" },
+            { id: "ORD-09214", platform: "Shopee", value: 850000, rate: "12.5%", comm: 106250, clickTime: "15/06/2026 - 14:15", auditDate: "29/06/2026", status: "Rejected" }
+        ];
+        let ordersDatabase = [...initialOrdersDatabase];
+
+        // Mock Withdrawals History Log
+        const withdrawalHistoryList = [
+            { date: "25/06/2026", amount: 50000, bank: "Vietcombank", card: "1029****", status: "Success" },
+            { date: "18/06/2026", amount: 70000, bank: "MB Bank", card: "9999****", status: "Rejected" }
+        ];
+
+        // Mock Friend Referrals Database
+        const friendReferralsList = [
+            { username: "hoang_tuan_99", joinDate: "22/06/2026", status: "Đang hoạt động", commission: "12,500đ" },
+            { username: "thuy_chi_cute", joinDate: "18/06/2026", status: "Đang hoạt động", commission: "34,000đ" },
+            { username: "nam_khanh_le", joinDate: "12/06/2026", status: "Chưa kích hoạt", commission: "7,500đ" }
+        ];
+
+        // Mock Claims List Database
+        const claimsHistoryList = [
+            { platform: "Shopee", orderId: "ORD-1120938", value: 450000, screenshot: "minh_chung_sp.png", status: "Checking" },
+            { platform: "Lazada", orderId: "ORD-4493012", value: 1250000, screenshot: "minh_chung_lz.png", status: "Added" }
+        ];
+
+        // Chart instance storage
+        let financialFlowChartObj = null;
+
+        // ----------------- NAVIGATION CONTROLLERS -----------------
+        function switchView(target) {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
+            
+            if (target === 'landing') {
+                document.getElementById('view-landing').classList.remove('hidden');
+                document.getElementById('public-menu-links').classList.remove('hidden');
+                currentView = 'landing';
+            } else if (target === 'app') {
+                if (!isLoggedIn) {
+                    showToast("Vui lòng đăng nhập để vào Không gian hoàn tiền!", "error");
+                    switchView('landing');
+                    return;
+                }
+                document.getElementById('view-app-container').classList.remove('hidden');
+                document.getElementById('public-menu-links').classList.add('hidden');
+                currentView = 'app';
+                // Trigger subtab rendering
+                switchAppTab(currentAppTab);
+            }
+        }
+
+        function switchAppTab(tabName) {
+            currentAppTab = tabName;
+            
+            // Highlight matching sidebar tab button
+            document.querySelectorAll('.app-tab-btn').forEach(btn => {
+                btn.className = "app-tab-btn w-full px-4 py-3 rounded-xl text-xs font-bold transition-all flex items-center gap-3 text-slate-400 hover:bg-white/5 hover:text-white";
+            });
+
+            // Active Tab Style
+            const activeBtn = document.getElementById(`tab-${tabName}`);
+            if (activeBtn) {
+                activeBtn.className = "app-tab-btn w-full px-4 py-3 rounded-xl text-xs font-bold transition-all flex items-center gap-3 bg-gradient-to-r from-purple-500/10 to-green-500/10 border-l-2 border-l-purple-500 text-white";
+            }
+
+            // Simulate responsive loading
+            const skel = document.getElementById('workspace-skeleton');
+            const views = document.querySelectorAll('.app-view');
+            
+            views.forEach(v => v.classList.add('hidden'));
+            skel.classList.remove('hidden');
+
+            setTimeout(() => {
+                skel.classList.add('hidden');
+                document.getElementById(`sub-view-${tabName}`).classList.remove('hidden');
+                
+                // Fire view-specific loaders
+                if (tabName === 'dashboard') {
+                    renderDashboardDetails();
+                } else if (tabName === 'generator') {
+                    renderRecentLinks();
+                } else if (tabName === 'orders') {
+                    renderOrdersTable(ordersDatabase);
+                } else if (tabName === 'withdraw') {
+                    renderWithdrawalModule();
+                } else if (tabName === 'referrals') {
+                    renderReferralsModule();
+                } else if (tabName === 'claims') {
+                    renderClaimsModule();
+                }
+            }, 350); // Fluid skeleton simulation delay
+        }
+
+        // ----------------- AUTHENTICATION SIMULATOR -----------------
+        function toggleAuthSimulation() {
+            if (!isLoggedIn) {
+                // Log in simulation
+                isLoggedIn = true;
+                
+                // Swap label values
+                document.getElementById('auth-btn-label').innerText = "Đăng Xuất";
+                document.getElementById('auth-main-btn').className = "relative group overflow-hidden px-5 py-2.5 rounded-xl font-display text-xs font-bold transition-all bg-red-600 hover:opacity-90 text-white";
+                
+                // Show user avatar display
+                document.getElementById('logged-user-tag').classList.remove('hidden');
+                document.getElementById('username-display').innerText = "Khắc Linh";
+                document.getElementById('avatar-char').innerText = "L";
+
+                showToast("Chào mừng bạn quay trở lại Ví Hoàn Tiền Pro!", "success");
+                switchView('app');
+            } else {
+                // Log out simulation
+                isLoggedIn = false;
+                
+                document.getElementById('auth-btn-label').innerText = "Đăng Nhập";
+                document.getElementById('auth-main-btn').className = "relative group overflow-hidden px-5 py-2.5 rounded-xl font-display text-xs font-bold transition-all shadow-neonPurpleGlow bg-gradient-to-r from-purple-600 to-purple-800 text-white hover:opacity-90";
+                
+                document.getElementById('logged-user-tag').classList.add('hidden');
+
+                showToast("Đã đăng xuất an toàn khỏi hệ thống.", "info");
+                switchView('landing');
+            }
+        }
+
+        function simulateLoginAndOpen(targetTab) {
+            if (!isLoggedIn) {
+                toggleAuthSimulation();
+            }
+            switchAppTab(targetTab);
+        }
+
+        // ----------------- LINK CONVERSION CONTROLLER -----------------
+        function processLandingConvert() {
+            const urlVal = document.getElementById('landing-input-url').value.trim();
+            if (!urlVal) {
+                showToast("Vui lòng dán liên kết sản phẩm hợp lệ!", "error");
+                return;
+            }
+
+            const platform = parsePlatformName(urlVal);
+            const token = Math.random().toString(36).substring(2, 7);
+            const shortLink = `chieukhau.pro/go/${platform.toLowerCase()}-${token}`;
+
+            document.getElementById('landing-platform-badge').innerText = platform.toUpperCase();
+            document.getElementById('landing-shortened-url').value = shortLink;
+            document.getElementById('landing-convert-result').classList.remove('hidden');
+
+            showToast("Tạo liên kết thử nghiệm thành công!", "success");
+        }
+
+        function generateUserAffiliateLink() {
+            const urlVal = document.getElementById('app-input-url').value.trim();
+            if (!urlVal) {
+                showToast("Vui lòng dán liên kết sản phẩm hợp lệ!", "error");
+                return;
+            }
+
+            const platform = parsePlatformName(urlVal);
+            const token = Math.random().toString(36).substring(2, 7);
+            const shortLink = `chieukhau.pro/go/${platform.toLowerCase()}-${token}`;
+
+            // Append to local created lists
+            recentCreatedLinks.unshift({
+                id: recentCreatedLinks.length + 1,
+                platform: platform,
+                original: urlVal.length > 40 ? urlVal.substring(0, 38) + '...' : urlVal,
+                shortUrl: shortLink,
+                rate: platform === 'Shopee' ? '12.5%' : platform === 'TikTok' ? '15.0%' : platform === 'Lazada' ? '9.8%' : '8.5%',
+                date: 'Mới đây'
+            });
+
+            // Update DOM Results
+            document.getElementById('app-res-platform').innerText = platform.toUpperCase();
+            document.getElementById('app-res-url').value = shortLink;
+            document.getElementById('app-res-rate').innerText = platform === 'Shopee' ? '12.5%' : platform === 'TikTok' ? '15.0%' : platform === 'Lazada' ? '9.8%' : '8.5%';
+            
+            // Set dynamic QR mock
+            document.getElementById('app-res-qr').src = `https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${encodeURIComponent(shortLink)}`;
+
+            document.getElementById('app-generator-result').classList.remove('hidden');
+            renderRecentLinks();
+
+            showToast("Đã tạo liên kết tiếp thị thành công!", "success");
+        }
+
+        function parsePlatformName(url) {
+            const lower = url.toLowerCase();
+            if (lower.includes('shopee')) return 'Shopee';
+            if (lower.includes('lazada')) return 'Lazada';
+            if (lower.includes('tiktok')) return 'TikTok';
+            return 'Tiki';
+        }
+
+        function renderRecentLinks() {
+            const container = document.getElementById('recent-links-container');
+            container.innerHTML = '';
+
+            recentCreatedLinks.forEach(item => {
+                const colorClass = item.platform === 'Shopee' ? 'text-orange-400' : item.platform === 'Lazada' ? 'text-blue-400' : 'text-purple-400';
+                const el = document.createElement('div');
+                el.className = 'bg-white/5 border border-white/5 p-3 rounded-xl space-y-1.5 hover:border-purple-500/20 transition-all text-xs';
+                el.innerHTML = `
+                    <div class="flex justify-between items-center">
+                        <span class="font-bold ${colorClass}">${item.platform} (${item.rate})</span>
+                        <span class="text-[10px] text-slate-500">${item.date}</span>
+                    </div>
+                    <p class="text-[10px] text-slate-400 font-mono truncate">${item.original}</p>
+                    <div class="flex gap-2 pt-1">
+                        <input type="text" value="${item.shortUrl}" readonly class="bg-slate-950 border border-white/5 rounded px-2 py-1 text-[10px] text-purple-300 font-mono flex-grow focus:outline-none">
+                        <button onclick="copyRawValue('${item.shortUrl}')" class="bg-purple-600/20 hover:bg-purple-600/40 text-purple-300 px-2 py-0.5 rounded text-[10px] font-bold">Copy</button>
+                    </div>
+                `;
+                container.appendChild(el);
+            });
+        }
+
+        // ----------------- RENDER OVERVIEW DASHBOARD -----------------
+        function renderDashboardDetails() {
+            // Populate financial metrics
+            document.getElementById('dash-avail-bal').innerText = availableBalance.toLocaleString('vi-VN') + "đ";
+            document.getElementById('dash-pending-bal').innerText = pendingBalance.toLocaleString('vi-VN') + "đ";
+            document.getElementById('dash-total-bal').innerText = totalEarned.toLocaleString('vi-VN') + "đ";
+
+            // Initialize Financial Growth Chart
+            setTimeout(() => {
+                const ctx = document.getElementById('financial-flow-chart');
+                if (!ctx) return;
+
+                if (financialFlowChartObj) {
+                    financialFlowChartObj.destroy();
+                }
+
+                financialFlowChartObj = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6'],
+                        datasets: [
+                            {
+                                label: 'Tổng Tích Lũy (đ)',
+                                data: [2100000, 4800000, 7500000, 11000000, 13400000, totalEarned],
+                                borderColor: '#A855F7',
+                                backgroundColor: 'rgba(168, 85, 247, 0.05)',
+                                fill: true,
+                                tension: 0.35,
+                                borderWidth: 3
+                            },
+                            {
+                                label: 'Số Dư Chờ Duyệt (đ)',
+                                data: [300000, 550000, 410000, 920000, 680000, pendingBalance],
+                                borderColor: '#22C55E',
+                                backgroundColor: 'rgba(34, 197, 94, 0.05)',
+                                fill: true,
+                                tension: 0.35,
+                                borderWidth: 2
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                labels: {
+                                    color: '#94A3B8',
+                                    font: { family: 'Inter', size: 10 }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                grid: { color: 'rgba(255, 255, 255, 0.04)' },
+                                ticks: { color: '#94A3B8', font: { family: 'Inter', size: 9 } }
+                            },
+                            x: {
+                                grid: { display: false },
+                                ticks: { color: '#94A3B8', font: { family: 'Inter', size: 9 } }
+                            }
+                        }
+                    }
+                });
+            }, 100);
+        }
+
+        // ----------------- ORDERS LOG FILTERING MODULE -----------------
+        function renderOrdersTable(data) {
+            const tbody = document.getElementById('app-orders-tbody');
+            tbody.innerHTML = '';
+
+            if (data.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="8" class="p-6 text-center text-slate-500">Không tìm thấy đơn hàng chi tiết nào khớp với bộ lọc.</td></tr>`;
+                return;
+            }
+
+            data.forEach(item => {
+                let badgeClass = "bg-slate-800 text-slate-300";
+                let statusLabel = item.status;
+                
+                if (item.status === 'Approved') {
+                    badgeClass = "bg-green-500/10 text-green-400 border border-green-500/20";
+                    statusLabel = "Đã duyệt";
+                } else if (item.status === 'Pending') {
+                    badgeClass = "bg-purple-500/10 text-purple-300 border border-purple-500/20 animate-pulse";
+                    statusLabel = "Chờ đối soát";
+                } else if (item.status === 'Rejected') {
+                    badgeClass = "bg-red-500/10 text-red-400 border border-red-500/20";
+                    statusLabel = "Bị hủy";
+                }
+
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-white/5 transition-colors";
+                tr.innerHTML = `
+                    <td class="p-4 font-mono font-bold text-slate-300">${item.id}</td>
+                    <td class="p-4 font-semibold text-slate-200">${item.platform}</td>
+                    <td class="p-4 text-slate-400">${item.value.toLocaleString('vi-VN')}đ</td>
+                    <td class="p-4 text-slate-500">${item.rate}</td>
+                    <td class="p-4 font-bold text-green-400">+${item.comm.toLocaleString('vi-VN')}đ</td>
+                    <td class="p-4 text-slate-400">${item.clickTime}</td>
+                    <td class="p-4 text-slate-500">${item.auditDate}</td>
+                    <td class="p-4 text-right">
+                        <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold ${badgeClass}">${statusLabel}</span>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function applyOrdersFilters() {
+            const status = document.getElementById('filter-order-status').value;
+            const platform = document.getElementById('filter-order-platform').value;
+            const searchVal = document.getElementById('search-order-id').value.trim().toLowerCase();
+
+            let result = ordersDatabase.filter(item => {
+                const matchesStatus = (status === 'all' || item.status === status);
+                const matchesPlatform = (platform === 'all' || item.platform === platform);
+                const matchesSearch = (searchVal === '' || item.id.toLowerCase().includes(searchVal));
+                return matchesStatus && matchesPlatform && matchesSearch;
+            });
+
+            renderOrdersTable(result);
+        }
+
+        // ----------------- INTERNET BANKING WITHDRAW MODULE -----------------
+        function renderWithdrawalModule() {
+            document.getElementById('withdraw-bal-indicator').innerText = availableBalance.toLocaleString('vi-VN') + "đ";
+            
+            const tbody = document.getElementById('withdraw-history-tbody');
+            tbody.innerHTML = '';
+
+            withdrawalHistoryList.forEach(item => {
+                let badgeClass = "bg-green-500/10 text-green-400 border border-green-500/20";
+                let statusLabel = "Hoàn thành";
+                if (item.status === 'Rejected') {
+                    badgeClass = "bg-red-500/10 text-red-400 border border-red-500/20";
+                    statusLabel = "Từ chối";
+                }
+
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-white/5 transition-colors text-xs";
+                tr.innerHTML = `
+                    <td class="py-3 font-semibold text-slate-400">${item.date}</td>
+                    <td class="py-3 font-bold text-red-400">-${item.amount.toLocaleString('vi-VN')}đ</td>
+                    <td class="py-3 font-medium text-slate-200">${item.bank} - ${item.card}</td>
+                    <td class="py-3 text-right">
+                        <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold ${badgeClass}">${statusLabel}</span>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function executeWithdrawSubmit() {
+            const bank = document.getElementById('withdraw-bank').value;
+            const account = document.getElementById('withdraw-account').value.trim();
+            const holder = document.getElementById('withdraw-holder').value.trim();
+            const amount = parseInt(document.getElementById('withdraw-amount').value);
+
+            if (!account || !holder) {
+                showToast("Vui lòng điền đủ mã số tài khoản và họ tên!", "error");
+                return;
+            }
+
+            if (isNaN(amount) || amount < 50000) {
+                showToast("Số tiền rút tối thiểu là 50,000đ!", "error");
+                return;
+            }
+
+            if (amount > availableBalance) {
+                showToast("Hạn mức tài khoản không đủ số dư khả dụng!", "error");
+                return;
+            }
+
+            // Deduct available balance
+            availableBalance -= amount;
+            
+            // Format bank card preview
+            const cardPreview = account.length > 4 ? account.substring(0, 4) + "****" : "****";
+
+            // Push to withdraw log history
+            withdrawalHistoryList.unshift({
+                date: "Hôm nay",
+                amount: amount,
+                bank: bank,
+                card: cardPreview,
+                status: "Success"
+            });
+
+            showToast("Đang kết nối cổng Internet Banking mã hóa...", "info");
+
+            setTimeout(() => {
+                showToast(`Giải ngân thành công ${amount.toLocaleString('vi-VN')}đ về tài khoản ${holder.toUpperCase()}`, "success");
+                renderWithdrawalModule();
+            }, 1200);
+        }
+
+        // ----------------- REFERRALS MODULE -----------------
+        function renderReferralsModule() {
+            const tbody = document.getElementById('referrals-tbody');
+            tbody.innerHTML = '';
+
+            friendReferralsList.forEach(item => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-white/5 transition-colors";
+                tr.innerHTML = `
+                    <td class="py-3 font-semibold text-slate-300">${item.username}</td>
+                    <td class="py-3 text-slate-400">${item.joinDate}</td>
+                    <td class="py-3 text-slate-400">${item.status}</td>
+                    <td class="py-3 text-right text-green-400 font-bold">${item.commission}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // ----------------- CLAIMS & COMPLAINTS MODULE -----------------
+        function renderClaimsModule() {
+            const tbody = document.getElementById('claims-history-tbody');
+            tbody.innerHTML = '';
+
+            claimsHistoryList.forEach(item => {
+                let badgeClass = "bg-purple-500/10 text-purple-300 border border-purple-500/20";
+                let statusText = "Đang kiểm tra";
+                if (item.status === 'Added') {
+                    badgeClass = "bg-green-500/10 text-green-400 border border-green-500/20";
+                    statusText = "Đã cộng tiền";
+                }
+
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-white/5 transition-colors text-xs";
+                tr.innerHTML = `
+                    <td class="py-3 font-semibold text-slate-200">${item.platform}</td>
+                    <td class="py-3 font-mono font-bold text-slate-400">${item.orderId}</td>
+                    <td class="py-3 text-slate-300">${item.value.toLocaleString('vi-VN')}đ</td>
+                    <td class="py-3 text-purple-400 underline cursor-pointer">${item.screenshot}</td>
+                    <td class="py-3 text-right">
+                        <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold ${badgeClass}">${statusText}</span>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function triggerMockUpload() {
+            document.getElementById('mock-file-input').click();
+        }
+
+        function handleMockFileSelect(event) {
+            const file = event.target.files[0];
+            if (file) {
+                document.getElementById('claim-file-label').innerText = `Tệp đã chọn: ${file.name}`;
+                showToast("Đã tải ảnh minh chứng lên bộ nhớ tạm!", "info");
+            }
+        }
+
+        function submitClaimRequest() {
+            const platform = document.getElementById('claim-platform').value;
+            const orderId = document.getElementById('claim-order-id').value.trim();
+            const value = parseInt(document.getElementById('claim-value').value);
+            const fileLabel = document.getElementById('claim-file-label').innerText;
+
+            if (!orderId || isNaN(value)) {
+                showToast("Vui lòng điền đủ mã đơn hàng và số tiền giao dịch!", "error");
+                return;
+            }
+
+            if (!fileLabel.includes("Tệp đã chọn")) {
+                showToast("Vui lòng tải ảnh chụp màn hình minh chứng giao dịch thành công!", "error");
+                return;
+            }
+
+            claimsHistoryList.unshift({
+                platform: platform,
+                orderId: orderId,
+                value: value,
+                screenshot: "minh_chung_uploaded.png",
+                status: "Checking"
+            });
+
+            showToast("Đang gửi yêu cầu tra soát lên hệ thống...", "info");
+
+            setTimeout(() => {
+                showToast("Gửi đơn tra soát thành công! Hệ thống sẽ xử lý trong 24 giờ.", "success");
+                renderClaimsModule();
+                // Reset file labels
+                document.getElementById('claim-file-label').innerText = "Nhấp vào đây để tải ảnh lên (PNG, JPG)";
+            }, 1000);
+        }
+
+        // ----------------- SYSTEM COMMON UTILS -----------------
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            
+            toast.className = `p-3.5 rounded-xl border text-xs flex items-center justify-between gap-3 bg-slate-900 border-white/10 pointer-events-auto transition-all duration-300 translate-y-3 opacity-0 shadow-glassGlow`;
+            
+            let color = "text-purple-400";
+            if (type === 'error') color = "text-red-500";
+            if (type === 'info') color = "text-green-400";
+
+            toast.innerHTML = `
+                <div class="flex items-center gap-2">
+                    <span class="${color} font-bold text-sm">•</span>
+                    <span class="font-medium text-slate-200">${message}</span>
+                </div>
+            `;
+
+            container.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.classList.remove('translate-y-3', 'opacity-0');
+            }, 10);
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-3');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        function copyGuestLink() {
+            copyToClipboard('landing-shortened-url');
+        }
+
+        function copyRawValue(value) {
+            const el = document.createElement('textarea');
+            el.value = value;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+            showToast("Đã sao chép liên kết hoàn tiền!");
+        }
+
+        function copyToClipboard(inputId, btnId) {
+            const input = document.getElementById(inputId);
+            input.select();
+            document.execCommand('copy');
+            
+            if (btnId) {
+                const btn = document.getElementById(btnId);
+                const originalText = btn.innerText;
+                btn.innerText = "Đã Copy!";
+                setTimeout(() => btn.innerText = originalText, 1500);
+            }
+            showToast("Đã sao chép liên kết hoàn tiền!");
+        }
+
+        // Initialization load
+        window.onload = function() {
+            switchView('landing');
+        };
+    </script>
+</body>
+</html>
