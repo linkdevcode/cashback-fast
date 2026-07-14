@@ -24,7 +24,7 @@ Checklist theo dõi tiến độ dự án. Cập nhật `[ ]` → `[x]` khi hoà
 | Phase        | Sprint | Trọng tâm                                             | Status        |
 | ------------ | ------ | ----------------------------------------------------- | ------------- |
 | Foundation   | 0      | Setup, DB, Auth, Design system                        | ✅ Done        |
-| MVP Core     | 1      | Landing, App shell, Links, Orders, Earnings, Withdraw | ⬜ Not started |
+| MVP Core     | 1      | Landing, App shell, Links, Orders, Earnings, Withdraw | 🟡 In progress |
 | Integrations | 2      | AccessTrade, Webhooks, Commission, Email, QR          | ⬜ Not started |
 | Growth       | 3      | Referral, Claims, Charts, Mobile polish               | ⬜ Not started |
 | Admin & Ship | 4      | Admin dashboard, Settings, Docs, Security             | ⬜ Not started |
@@ -109,13 +109,13 @@ Checklist theo dõi tiến độ dự án. Cập nhật `[ ]` → `[x]` khi hoà
 
 ### 1.1 Landing page (`/`) — khớp mockup
 
-- [ ] Floating glass navbar (logo, nav links, CTA đăng nhập)
-- [ ] Hero + live demo link converter (public CTA)
-- [ ] Trust / stats section
-- [ ] Partner platforms grid (Shopee, Lazada, TikTok, Tiki)
-- [ ] How it works
-- [ ] Footer
-- [ ] Responsive mobile/tablet/desktop
+- [x] Floating glass navbar (logo, nav links, CTA đăng nhập)
+- [x] Hero + live demo link converter (public CTA)
+- [x] Trust / stats section
+- [x] Partner platforms grid (Shopee, Lazada, TikTok, Tiki)
+- [x] How it works
+- [x] Footer
+- [x] Responsive mobile/tablet/desktop
 
 
 
