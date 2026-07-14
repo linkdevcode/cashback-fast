@@ -45,8 +45,8 @@ Checklist theo dõi tiến độ dự án. Cập nhật `[ ]` → `[x]` khi hoà
 ### 0.2 Infrastructure
 - [ ] Tạo Supabase project (dev) + local CLI (optional)
 - [ ] Tạo Vercel project, connect Git repo
- - [ ] Cấu hình Google provider trực tiếp trong Supabase Auth Dashboard
-- [ ] CI cơ bản (GitHub Actions: lint + type-check) — deploy sau khi có code
+- [ ] Cấu hình Google provider trực tiếp trong Supabase Auth Dashboard
+- [x] CI cơ bản (GitHub Actions: lint + type-check) — deploy sau khi có code
 
 ### 0.3 Database schema & RLS
 - [ ] Migration: `users`, `bank_accounts`, `platforms`, `commission_rates`
