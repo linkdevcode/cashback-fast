@@ -1,0 +1,21 @@
+{
+  "version": 2,
+  "framework": "nextjs",
+  "regions": ["sin1"],
+  "rewrites": [
+    {
+      "source": "/go/:code",
+      "destination": "/api/redirect/:code"
+    }
+  ],
+  "crons": [
+    {
+      "path": "/api/cron/sync-orders",
+      "schedule": "*/10 * * * *"
+    },
+    {
+      "path": "/api/cron/process-withdrawals",
+      "schedule": "0 9 * * *"
+    }
+  ]
+}
