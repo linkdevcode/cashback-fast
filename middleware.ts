@@ -1,7 +1,7 @@
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
-const PUBLIC_PAGE_PATHS = ["/", "/login", "/auth/callback"];
+const PUBLIC_PAGE_PATHS = ["/", "/login", "/auth/callback", "/logout"];
 const PUBLIC_PREFIXES = ["/api/v1/auth", "/api/v1/webhooks", "/api/redirect"];
 
 function isPublicPath(pathname: string) {
