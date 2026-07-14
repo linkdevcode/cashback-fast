@@ -49,13 +49,13 @@ Checklist theo dõi tiến độ dự án. Cập nhật `[ ]` → `[x]` khi hoà
 - [x] CI cơ bản (GitHub Actions: lint + type-check) — deploy sau khi có code
 
 ### 0.3 Database schema & RLS
-- [ ] Migration: `users`, `bank_accounts`, `platforms`, `commission_rates`
-- [ ] Migration: `affiliate_links`, `orders`, `withdrawals`, `claims`
-- [ ] Migration: `referral_commissions`, `settings`, `activity_logs`
-- [ ] Indexes theo SPEC §4.1
-- [ ] Seed: platforms (Shopee, Lazada, TikTok Shop, Tiki) + default settings
-- [ ] RLS policies cho mọi bảng user-owned
-- [ ] Supabase clients: `lib/db/server.ts`, `client.ts`, `middleware.ts`
+- [x] Migration: `users`, `bank_accounts`, `platforms`, `commission_rates`
+- [x] Migration: `affiliate_links`, `orders`, `withdrawals`, `claims`
+- [x] Migration: `referral_commissions`, `settings`, `activity_logs`
+- [x] Indexes theo SPEC §4.1
+- [x] Seed: platforms (Shopee, Lazada, TikTok Shop, Tiki) + default settings
+- [x] RLS policies cho mọi bảng user-owned
+- [x] Supabase clients: `lib/db/server.ts`, `client.ts`, `middleware.ts`
 
 ### 0.4 Auth foundation
 - [ ] Google OAuth login flow (Supabase Auth)
