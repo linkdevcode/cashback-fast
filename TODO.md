@@ -21,14 +21,14 @@ Checklist theo dõi tiến độ dự án. Cập nhật `[ ]` → `[x]` khi hoà
 ## Tiến độ tổng quan
 
 
-| Phase        | Sprint | Trọng tâm                                             | Status         |
-| ------------ | ------ | ----------------------------------------------------- | -------------- |
-| Foundation   | 0      | Setup, DB, Auth, Design system                        | 🟡 In progress |
-| MVP Core     | 1      | Landing, App shell, Links, Orders, Earnings, Withdraw | ⬜ Not started  |
-| Integrations | 2      | AccessTrade, Webhooks, Commission, Email, QR          | ⬜ Not started  |
-| Growth       | 3      | Referral, Claims, Charts, Mobile polish               | ⬜ Not started  |
-| Admin & Ship | 4      | Admin dashboard, Settings, Docs, Security             | ⬜ Not started  |
-| Post-MVP     | —      | Mobile app, Extension, Multi-network                  | ⬜ Backlog      |
+| Phase        | Sprint | Trọng tâm                                             | Status        |
+| ------------ | ------ | ----------------------------------------------------- | ------------- |
+| Foundation   | 0      | Setup, DB, Auth, Design system                        | ✅ Done        |
+| MVP Core     | 1      | Landing, App shell, Links, Orders, Earnings, Withdraw | ⬜ Not started |
+| Integrations | 2      | AccessTrade, Webhooks, Commission, Email, QR          | ⬜ Not started |
+| Growth       | 3      | Referral, Claims, Charts, Mobile polish               | ⬜ Not started |
+| Admin & Ship | 4      | Admin dashboard, Settings, Docs, Security             | ⬜ Not started |
+| Post-MVP     | —      | Mobile app, Extension, Multi-network                  | ⬜ Backlog     |
 
 
 **Legend:** ⬜ Not started · 🟡 In progress · ✅ Done

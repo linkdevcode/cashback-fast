@@ -10,6 +10,20 @@ begin
 end;
 $$;
 
+create table if not exists public.users (
+  id uuid references auth.users on delete cascade primary key,
+  email text unique not null,
+  full_name text,
+  avatar_url text,
+  phone text,
+  referral_code text unique,
+  referred_by uuid references public.users(id),
+  is_banned boolean not null default false,
+  is_admin boolean not null default false,
+  created_at timestamp with time zone not null default timezone('utc'::text, now()),
+  updated_at timestamp with time zone not null default timezone('utc'::text, now())
+);
+
 create or replace function public.is_admin()
 returns boolean
 language sql
@@ -25,20 +39,6 @@ as $$
       and u.is_banned = false
   );
 $$;
-
-create table if not exists public.users (
-  id uuid references auth.users on delete cascade primary key,
-  email text unique not null,
-  full_name text,
-  avatar_url text,
-  phone text,
-  referral_code text unique,
-  referred_by uuid references public.users(id),
-  is_banned boolean not null default false,
-  is_admin boolean not null default false,
-  created_at timestamp with time zone not null default timezone('utc'::text, now()),
-  updated_at timestamp with time zone not null default timezone('utc'::text, now())
-);
 
 create table if not exists public.bank_accounts (
   id uuid default gen_random_uuid() primary key,
