@@ -88,12 +88,12 @@ Checklist theo dõi tiến độ dự án. Cập nhật `[ ]` → `[x]` khi hoà
 
 ### 0.5 Design system (theo mockup)
 
-- [ ] CSS variables: dark glassmorphism palette (SPEC §6.1)
-- [ ] Fonts: Plus Jakarta Sans (display) + Inter (body)
-- [ ] Utility classes: `.glass-panel`, neon glow, gradient text
-- [ ] Base UI: Button, Input, Card, Dialog, Select, Table, Tabs, Toast, Badge, Skeleton
-- [ ] Layout shells: Root layout, App sidebar, Mobile nav, Footer
-- [ ] Micro-interactions: fade/slide page transition, hover glow, shimmer skeleton
+- [x] CSS variables: dark glassmorphism palette (SPEC §6.1)
+- [x] Fonts: Plus Jakarta Sans (display) + Inter (body)
+- [x] Utility classes: `.glass-panel`, neon glow, gradient text
+- [x] Base UI: Button, Input, Card, Dialog, Select, Table, Tabs, Toast, Badge, Skeleton
+- [x] Layout shells: Root layout, App sidebar, Mobile nav, Footer
+- [x] Micro-interactions: fade/slide page transition, hover glow, shimmer skeleton
 
 **Definition of Done (Sprint 0):** `npm run dev` chạy được; login Google OK; schema + RLS đã apply; UI kit render được vài component glass trên trang trống.
 

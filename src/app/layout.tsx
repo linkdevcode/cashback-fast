@@ -25,7 +25,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="vi" className={`${inter.variable} ${jakarta.variable}`}>
-      <body className="font-sans antialiased">{children}</body>
+      <body className="bg-background font-sans text-foreground antialiased">
+        {children}
+      </body>
     </html>
   );
 }
