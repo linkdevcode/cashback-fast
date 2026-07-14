@@ -121,10 +121,10 @@ Checklist theo dõi tiến độ dự án. Cập nhật `[ ]` → `[x]` khi hoà
 
 ### 1.2 App shell (`/app/*`)
 
-- [ ] Authenticated layout + sidebar (Dashboard, Tạo Link, Đơn Hàng, Rút Tiền, Giới Thiệu, Khiếu Nại, Settings)
-- [ ] Active tab state + mobile collapsible / bottom nav
-- [ ] User menu (avatar, logout)
-- [ ] Protected route redirect → `/login?redirect=...`
+- [x] Authenticated layout + sidebar (Dashboard, Tạo Link, Đơn Hàng, Rút Tiền, Giới Thiệu, Khiếu Nại, Settings)
+- [x] Active tab state + mobile collapsible / bottom nav
+- [x] User menu (avatar, logout)
+- [x] Protected route redirect → `/login?redirect=...`
 
 
 

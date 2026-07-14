@@ -1,6 +1,9 @@
+"use client";
+
 import Link from "next/link";
 import { cn } from "@/lib/cn";
 import { Badge } from "@/components/ui/badge";
+import { usePathname } from "next/navigation";
 
 type NavItem = {
   label: string;
@@ -10,7 +13,7 @@ type NavItem = {
 };
 
 const defaultNavItems: NavItem[] = [
-  { label: "Dashboard", href: "/app/dashboard", active: true },
+  { label: "Dashboard", href: "/app/dashboard" },
   { label: "Tạo Link", href: "/app/links" },
   { label: "Đơn Hàng", href: "/app/orders" },
   { label: "Rút Tiền", href: "/app/withdrawals" },
@@ -20,6 +23,8 @@ const defaultNavItems: NavItem[] = [
 ];
 
 export function Sidebar({ items = defaultNavItems }: { items?: NavItem[] }) {
+  const pathname = usePathname();
+
   return (
     <aside className="hidden w-72 border-r border-white/5 bg-slate-950/60 p-5 backdrop-blur-xl md:flex md:flex-col">
       <div className="mb-8">
@@ -36,7 +41,7 @@ export function Sidebar({ items = defaultNavItems }: { items?: NavItem[] }) {
             href={item.href}
             className={cn(
               "flex items-center justify-between rounded-2xl px-4 py-3 text-sm font-medium transition-colors",
-              item.active
+              pathname === item.href || pathname.startsWith(`${item.href}/`)
                 ? "bg-violet-500/15 text-white"
                 : "text-slate-400 hover:bg-white/5 hover:text-white"
             )}
