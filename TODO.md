@@ -150,11 +150,11 @@ Checklist theo dõi tiến độ dự án. Cập nhật `[ ]` → `[x]` khi hoà
 
 ### 1.5 Earnings dashboard (`/app/dashboard`) — F4
 
-- [ ] API: `GET /api/v1/earnings/dashboard`, `/history`, `/platforms`
-- [ ] Stat cards: Available / Pending / Total Earned
-- [ ] Earnings chart (7 / 30 / 90 ngày) — Recharts hoặc tương đương
-- [ ] Platform breakdown + recent activity
-- [ ] Quick actions: tạo link, rút tiền
+- [x] API: `GET /api/v1/earnings/dashboard`, `/history`, `/platforms`
+- [x] Stat cards: Available / Pending / Total Earned
+- [x] Earnings chart (7 / 30 / 90 ngày) — Recharts hoặc tương đương
+- [x] Platform breakdown + recent activity
+- [x] Quick actions: tạo link, rút tiền
 
 
 
@@ -360,7 +360,7 @@ Dùng để đối chiếu SPEC §3 khi review.
 | F1.1–F1.4 | Auth (Google, profile, session, middleware) | 0      | [ ]  |
 | F2.1–F2.6 | Affiliate link generation + QR + history    | 1–2    | [ ]  |
 | F3.1–F3.5 | Order tracking + webhook + filters          | 1–2    | [ ]  |
-| F4.1–F4.4 | Earnings dashboard                          | 1      | [ ]  |
+| F4.1–F4.4 | Earnings dashboard                          | 1      | [x]  |
 | F5.1–F5.6 | Withdrawals + banks + email                 | 1–2    | [ ]  |
 | F6.1–F6.4 | Missing order claims                        | 3      | [ ]  |
 
