@@ -23,7 +23,6 @@ import {
   type WithdrawalSummary,
 } from "@/lib/withdrawals";
 import { formatRelativeTime } from "@/lib/links";
-import { Trash2 } from "lucide-react";
 import { useEffect, useMemo, useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 
@@ -51,14 +50,8 @@ export function WithdrawalsWorkspace({
 }: WithdrawalsWorkspaceProps) {
   const router = useRouter();
   const [message, setMessage] = useState<MessageState>(null);
-  const [loadingAction, setLoadingAction] = useState<"bank" | "withdrawal" | `delete:${string}` | null>(null);
+  const [loadingAction, setLoadingAction] = useState<"withdrawal" | null>(null);
   const [selectedBankId, setSelectedBankId] = useState(banks.find((bank) => bank.is_default)?.id || banks[0]?.id || "");
-  const [bankForm, setBankForm] = useState({
-    bank_name: "",
-    bank_code: "",
-    account_number: "",
-    account_holder: "",
-  });
   const [withdrawalForm, setWithdrawalForm] = useState({
     amount: "",
     notes: "",
@@ -78,80 +71,6 @@ export function WithdrawalsWorkspace({
   async function refreshAfterMutation(nextMessage: MessageState) {
     setMessage(nextMessage);
     router.refresh();
-  }
-
-  async function submitBank(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setLoadingAction("bank");
-
-    try {
-      const response = await fetch("/api/v1/banks", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...bankForm,
-          is_default: banks.length === 0,
-        }),
-      });
-
-      const payload = await response.json();
-
-      if (!response.ok) {
-        setMessage({
-          title: "Không tạo được bank account",
-          description: payload?.error || "Vui lòng kiểm tra lại thông tin nhập.",
-          variant: "error",
-        });
-        return;
-      }
-
-      setBankForm({
-        bank_name: "",
-        bank_code: "",
-        account_number: "",
-        account_holder: "",
-      });
-      await refreshAfterMutation({
-        title: "Đã thêm bank account",
-        description: "Danh sách ngân hàng đã được cập nhật.",
-        variant: "success",
-      });
-    } finally {
-      setLoadingAction(null);
-    }
-  }
-
-  async function deleteBank(bankId: string) {
-    setLoadingAction(`delete:${bankId}`);
-
-    try {
-      const response = await fetch(`/api/v1/banks/${bankId}`, {
-        method: "DELETE",
-      });
-
-      const payload = await response.json();
-
-      if (!response.ok) {
-        setMessage({
-          title: "Không xóa được bank account",
-          description: payload?.error || "Vui lòng thử lại.",
-          variant: "error",
-        });
-        return;
-      }
-
-      if (selectedBankId === bankId) {
-        setSelectedBankId(banks.find((bank) => bank.id !== bankId)?.id || "");
-      }
-
-      await refreshAfterMutation({
-        title: "Đã xóa bank account",
-        description: "Danh sách ngân hàng đã được làm mới.",
-        variant: "success",
-      });
-    } finally {
-      setLoadingAction(null);
-    }
   }
 
   async function submitWithdrawal(event: FormEvent<HTMLFormElement>) {
@@ -241,186 +160,78 @@ export function WithdrawalsWorkspace({
         </Card>
       </section>
 
-      <section className="grid gap-6 xl:grid-cols-[0.95fr_1.05fr]">
-        <div className="space-y-6">
-          <Card className="bg-white/[0.03]">
-            <CardHeader>
-              <CardTitle className="text-display text-2xl">Bank accounts</CardTitle>
-              <CardDescription>Thêm hoặc xóa tài khoản ngân hàng để nhận tiền rút.</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <form className="grid gap-4" onSubmit={submitBank}>
-                <div className="grid gap-4 md:grid-cols-2">
-                  <label className="space-y-2">
-                    <span className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-400">
-                      Bank name
-                    </span>
-                    <Input
-                      value={bankForm.bank_name}
-                      onChange={(event) => setBankForm((current) => ({ ...current, bank_name: event.target.value }))}
-                      placeholder="Vietcombank"
-                      required
-                    />
-                  </label>
-                  <label className="space-y-2">
-                    <span className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-400">
-                      Bank code
-                    </span>
-                    <Input
-                      value={bankForm.bank_code}
-                      onChange={(event) => setBankForm((current) => ({ ...current, bank_code: event.target.value }))}
-                      placeholder="VCB"
-                      required
-                    />
-                  </label>
-                </div>
+      <section className="grid gap-6 xl:grid-cols-[1fr_1.2fr]">
+        <Card className="bg-white/[0.03]">
+          <CardHeader>
+            <CardTitle className="text-display text-2xl">Withdrawal request</CardTitle>
+            <CardDescription>
+              Min {formatWithdrawalAmount(MIN_WITHDRAWAL_AMOUNT)} · Max {formatWithdrawalAmount(summary.availableBalance)}
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form className="space-y-4" onSubmit={submitWithdrawal}>
+              <label className="space-y-2">
+                <span className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-400">
+                  Select bank
+                </span>
+                <Select value={selectedBankId} onChange={(event) => setSelectedBankId(event.target.value)}>
+                  <option value="">Choose a bank</option>
+                  {banks.map((bank) => (
+                    <option key={bank.id} value={bank.id}>
+                      {bank.bank_name} · {bank.account_number}
+                    </option>
+                  ))}
+                </Select>
+              </label>
 
-                <div className="grid gap-4 md:grid-cols-2">
-                  <label className="space-y-2">
-                    <span className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-400">
-                      Account number
-                    </span>
-                    <Input
-                      value={bankForm.account_number}
-                      onChange={(event) =>
-                        setBankForm((current) => ({ ...current, account_number: event.target.value }))
-                      }
-                      placeholder="0123456789"
-                      required
-                    />
-                  </label>
-                  <label className="space-y-2">
-                    <span className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-400">
-                      Account holder
-                    </span>
-                    <Input
-                      value={bankForm.account_holder}
-                      onChange={(event) =>
-                        setBankForm((current) => ({ ...current, account_holder: event.target.value }))
-                      }
-                      placeholder="Nguyễn Khắc Linh"
-                      required
-                    />
-                  </label>
-                </div>
+              <label className="space-y-2">
+                <span className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-400">
+                  Amount (VND)
+                </span>
+                <Input
+                  type="number"
+                  min={MIN_WITHDRAWAL_AMOUNT}
+                  step="1"
+                  value={withdrawalForm.amount}
+                  onChange={(event) => setWithdrawalForm((current) => ({ ...current, amount: event.target.value }))}
+                  placeholder="50000"
+                  required
+                />
+                <p className="text-xs text-slate-500">
+                  {isAmountBelowMin
+                    ? "Số tiền rút tối thiểu là 50.000đ."
+                    : isAmountOverAvailable
+                      ? "Số tiền vượt quá số dư khả dụng."
+                      : "Số tiền sẽ được giữ ở trạng thái pending sau khi gửi yêu cầu."}
+                </p>
+              </label>
 
-                <Button type="submit" disabled={loadingAction === "bank"}>
-                  Add bank account
-                </Button>
-              </form>
+              <label className="space-y-2">
+                <span className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-400">
+                  Notes
+                </span>
+                <Input
+                  value={withdrawalForm.notes}
+                  onChange={(event) => setWithdrawalForm((current) => ({ ...current, notes: event.target.value }))}
+                  placeholder="Optional note for admin"
+                />
+              </label>
 
-              <div className="space-y-3">
-                {banks.length > 0 ? (
-                  banks.map((bank) => (
-                    <div key={bank.id} className="rounded-2xl border border-white/10 bg-white/[0.02] p-4">
-                      <div className="flex items-start justify-between gap-3">
-                        <div className="space-y-1">
-                          <div className="flex flex-wrap items-center gap-2">
-                            <p className="font-semibold text-white">{bank.bank_name}</p>
-                            {bank.is_default ? <Badge variant="success">Default</Badge> : null}
-                          </div>
-                          <p className="text-sm text-slate-400">
-                            {bank.account_number} · {bank.account_holder}
-                          </p>
-                          <p className="text-xs uppercase tracking-[0.24em] text-slate-500">{bank.bank_code}</p>
-                        </div>
-                        <button
-                          type="button"
-                          onClick={() => deleteBank(bank.id)}
-                          disabled={loadingAction === `delete:${bank.id}`}
-                          className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] text-slate-300 transition-colors hover:bg-white/[0.08]"
-                          aria-label={`Delete ${bank.bank_name}`}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </button>
-                      </div>
-                    </div>
-                  ))
-                ) : (
-                  <div className="rounded-2xl border border-dashed border-white/10 bg-white/[0.02] p-6 text-sm text-slate-400">
-                    Chưa có bank account nào.
-                  </div>
-                )}
+              <Button
+                type="submit"
+                disabled={loadingAction === "withdrawal" || !selectedBankId || summary.availableBalance < MIN_WITHDRAWAL_AMOUNT}
+              >
+                Create withdrawal request
+              </Button>
+            </form>
+
+            {defaultBank ? (
+              <div className="mt-4 rounded-2xl border border-white/10 bg-white/[0.02] p-4 text-sm text-slate-300">
+                Bank mặc định hiện tại: <span className="font-semibold text-white">{getDisplayBank(defaultBank)}</span>
               </div>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-white/[0.03]">
-            <CardHeader>
-              <CardTitle className="text-display text-2xl">Withdrawal request</CardTitle>
-              <CardDescription>
-                Min {formatWithdrawalAmount(MIN_WITHDRAWAL_AMOUNT)} · Max {formatWithdrawalAmount(summary.availableBalance)}
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <form className="space-y-4" onSubmit={submitWithdrawal}>
-                <label className="space-y-2">
-                  <span className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-400">
-                    Select bank
-                  </span>
-                  <Select value={selectedBankId} onChange={(event) => setSelectedBankId(event.target.value)}>
-                    <option value="">Choose a bank</option>
-                    {banks.map((bank) => (
-                      <option key={bank.id} value={bank.id}>
-                        {bank.bank_name} · {bank.account_number}
-                      </option>
-                    ))}
-                  </Select>
-                </label>
-
-                <label className="space-y-2">
-                  <span className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-400">
-                    Amount (VND)
-                  </span>
-                  <Input
-                    type="number"
-                    min={MIN_WITHDRAWAL_AMOUNT}
-                    step="1"
-                    value={withdrawalForm.amount}
-                    onChange={(event) => setWithdrawalForm((current) => ({ ...current, amount: event.target.value }))}
-                    placeholder="50000"
-                    required
-                  />
-                  <p className="text-xs text-slate-500">
-                    {isAmountBelowMin
-                      ? "Số tiền rút tối thiểu là 50.000đ."
-                      : isAmountOverAvailable
-                        ? "Số tiền vượt quá số dư khả dụng."
-                        : "Số tiền sẽ được giữ ở trạng thái pending sau khi gửi yêu cầu."}
-                  </p>
-                </label>
-
-                <label className="space-y-2">
-                  <span className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-400">
-                    Notes
-                  </span>
-                  <Input
-                    value={withdrawalForm.notes}
-                    onChange={(event) => setWithdrawalForm((current) => ({ ...current, notes: event.target.value }))}
-                    placeholder="Optional note for admin"
-                  />
-                </label>
-
-                <Button
-                  type="submit"
-                  disabled={
-                    loadingAction === "withdrawal" ||
-                    !selectedBankId ||
-                    summary.availableBalance < MIN_WITHDRAWAL_AMOUNT
-                  }
-                >
-                  Create withdrawal request
-                </Button>
-              </form>
-
-              {defaultBank ? (
-                <div className="mt-4 rounded-2xl border border-white/10 bg-white/[0.02] p-4 text-sm text-slate-300">
-                  Bank mặc định hiện tại: <span className="font-semibold text-white">{getDisplayBank(defaultBank)}</span>
-                </div>
-              ) : null}
-            </CardContent>
-          </Card>
-        </div>
+            ) : null}
+          </CardContent>
+        </Card>
 
         <Card className="bg-white/[0.03]">
           <CardHeader>
@@ -474,6 +285,23 @@ export function WithdrawalsWorkspace({
           </CardContent>
         </Card>
       </section>
+
+      <Card className="bg-white/[0.03]">
+        <CardHeader>
+          <CardTitle className="text-display text-2xl">Manage bank accounts</CardTitle>
+          <CardDescription>
+            Thêm, xóa và cấu hình bank accounts đã được chuyển sang Settings để giữ màn Withdraw gọn hơn.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <a
+            href="/app/settings"
+            className="inline-flex h-11 items-center justify-center rounded-xl bg-gradient-to-r from-violet-500 to-emerald-500 px-4 text-sm font-semibold text-white transition-opacity hover:opacity-95"
+          >
+            Đi tới Settings
+          </a>
+        </CardContent>
+      </Card>
     </div>
   );
 }

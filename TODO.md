@@ -163,19 +163,21 @@ Checklist theo dõi tiến độ dự án. Cập nhật `[ ]` → `[x]` khi hoà
 - [x] API banks: `POST/GET/DELETE /api/v1/banks`
 - [x] API withdrawals: `POST/GET /api/v1/withdrawals`
 - [x] Validation: min 50.000đ, max = available balance
-- [x] UI: balance indicator, bank form/select, amount, submit
+- [x] UI: balance indicator, bank select, amount, submit
 - [x] Withdrawal history table + status tracking
 - [x] Rate limit: 5 withdrawals/hour/user
 
 *Note:* Email notification khi withdrawal status thay đổi sẽ xử lý ở Sprint 2 cùng phần hardening/notifications.
 
+*Note:* Bank account CRUD được chuyển sang Sprint 1.7 `Settings`; màn Withdraw chỉ còn chọn bank đã lưu.
+
 
 
 ### 1.7 Settings (`/app/settings`)
 
-- [ ] Profile view/edit (name, phone, avatar)
-- [ ] Quản lý bank accounts (CRUD)
-- [ ] Legal links placeholder (Privacy / Terms)
+- [x] Profile view/edit (name, phone, avatar)
+- [x] Quản lý bank accounts (CRUD)
+- [x] Legal links placeholder (Privacy / Terms)
 
 **Definition of Done (Sprint 1):** Full happy-path UI theo mockup với data mock/local; chưa bắt buộc AccessTrade thật.
 
