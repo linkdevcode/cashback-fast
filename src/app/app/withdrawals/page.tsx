@@ -9,14 +9,13 @@ export default async function WithdrawalsPage() {
     redirect("/login?redirect=/app/withdrawals");
   }
 
-  const { banks, withdrawals, summary, usingDemoData } = await loadWithdrawalsDashboardData(supabase, user.id);
+  const { banks, withdrawals, summary } = await loadWithdrawalsDashboardData(supabase, user.id);
 
   return (
     <WithdrawalsWorkspace
       banks={banks}
       withdrawals={withdrawals}
       summary={summary}
-      usingDemoData={usingDemoData}
     />
   );
 }

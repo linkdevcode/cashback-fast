@@ -60,12 +60,12 @@ function getRelevantDate(order: OrderRecord) {
   return order.status === "approved" && order.conversion_time ? new Date(order.conversion_time) : new Date(order.created_at);
 }
 
-function getApprovedOrders(orders: OrderRecord[]) {
-  return orders.filter((order) => order.status === "approved");
+function getEarningOrders(orders: OrderRecord[]) {
+  return orders.filter((order) => order.status === "approved" || order.status === "paid");
 }
 
 export function buildEarningsHistory(orders: OrderRecord[], days: EarningsRange) {
-  const approvedOrders = getApprovedOrders(orders);
+  const approvedOrders = getEarningOrders(orders);
   const start = getSeriesStart(days);
   const cursor = new Date(start);
   const valuesByDay = new Map<string, number>();
@@ -101,7 +101,7 @@ export function buildEarningsHistoryByRange(orders: OrderRecord[]) {
 }
 
 export function buildPlatformBreakdown(orders: OrderRecord[]) {
-  const approvedOrders = getApprovedOrders(orders);
+  const approvedOrders = getEarningOrders(orders);
   const totals = new Map<string, { code: string; name: string; amount: number; orderCount: number }>();
 
   approvedOrders.forEach((order) => {
@@ -133,9 +133,13 @@ export function buildRecentActivity(orders: OrderRecord[], limit = 5): EarningsA
     .slice(0, limit)
     .map((order) => {
       const statusMeta = getOrderStatusMeta(order.status);
-      const amountLabel = order.status === "approved" ? `+${order.user_commission.toLocaleString("vi-VN")}đ` : `${order.user_commission.toLocaleString("vi-VN")}đ`;
+      const amountLabel =
+        order.status === "approved" || order.status === "paid"
+          ? `+${order.user_commission.toLocaleString("vi-VN")}đ`
+          : `${order.user_commission.toLocaleString("vi-VN")}đ`;
       const descriptionByStatus: Record<OrderRecord["status"], string> = {
         approved: "Đã ghi nhận vào earnings",
+        paid: "Đã thanh toán vào số dư",
         pending: "Đang chờ duyệt từ nền tảng",
         rejected: "Đơn bị từ chối",
       };

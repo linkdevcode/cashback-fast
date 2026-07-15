@@ -10,9 +10,9 @@ type MobileNavItem = {
 };
 
 const defaultMobileItems: MobileNavItem[] = [
-  { label: "Home", href: "/" },
-  { label: "Dashboard", href: "/app/dashboard" },
-  { label: "Links", href: "/app/links" },
+  { label: "Trang chủ", href: "/" },
+  { label: "Tổng quan", href: "/app/dashboard" },
+  { label: "Tạo Link", href: "/app/links" },
 ];
 
 export function MobileNav({ items = defaultMobileItems }: { items?: MobileNavItem[] }) {

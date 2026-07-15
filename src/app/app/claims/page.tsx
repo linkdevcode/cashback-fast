@@ -3,8 +3,8 @@ import { FeaturePlaceholder } from "@/components/features/app/feature-placeholde
 export default function ClaimsPage() {
   return (
     <FeaturePlaceholder
-      title="Khiếu Nại"
-      description="Form báo sót đơn và lịch sử claim sẽ được triển khai trong sprint growth."
+      title="Hỗ trợ & khiếu nại"
+      description="Khu vực này sẽ chứa form báo sót đơn và lịch sử khiếu nại."
     />
   );
 }

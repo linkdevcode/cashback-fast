@@ -15,7 +15,7 @@ const jakarta = Plus_Jakarta_Sans({
 
 export const metadata: Metadata = {
   title: "Hoàn Tiền Pro",
-  description: "Nền tảng cashback affiliate với giao diện dark glassmorphism.",
+  description: "Nền tảng cashback affiliate với giao diện đẹp mắt và dễ sử dụng.",
 };
 
 export default function RootLayout({

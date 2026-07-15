@@ -9,14 +9,12 @@ export default async function SettingsPage() {
     redirect("/login?redirect=/app/settings");
   }
 
-  const { profile, banks, usingDemoBanks, usingDemoProfile } = await loadSettingsData(supabase, user.id);
+  const { profile, banks } = await loadSettingsData(supabase, user.id);
 
   return (
     <SettingsWorkspace
       profile={profile}
       banks={banks}
-      usingDemoBanks={usingDemoBanks}
-      usingDemoProfile={usingDemoProfile}
     />
   );
 }

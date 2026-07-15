@@ -1,5 +1,4 @@
 import { createClient } from "@/lib/db/server";
-import { DEMO_BANK_ACCOUNTS } from "@/lib/withdrawals";
 
 export async function getSettingsUserAndSupabase() {
   const supabase = createClient();
@@ -20,12 +19,10 @@ export async function loadSettingsData(supabase: ReturnType<typeof createClient>
   ]);
 
   const profile = profileResult.data;
-  const banks = bankResult.data && bankResult.data.length > 0 ? bankResult.data : DEMO_BANK_ACCOUNTS;
+  const banks = bankResult.data ?? [];
 
   return {
     profile,
     banks,
-    usingDemoBanks: !bankResult.data || bankResult.data.length === 0,
-    usingDemoProfile: !profile,
   };
 }

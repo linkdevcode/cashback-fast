@@ -14,8 +14,8 @@ type FeaturePlaceholderProps = {
 export function FeaturePlaceholder({
   title,
   description,
-  badge = "Coming soon",
-  ctaLabel = "Back to dashboard",
+  badge = "Sắp ra mắt",
+  ctaLabel = "Về tổng quan",
   ctaHref = "/app/dashboard",
 }: FeaturePlaceholderProps) {
   return (

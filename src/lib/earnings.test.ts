@@ -15,7 +15,8 @@ describe("earnings helpers", () => {
       available: 62160,
       pending: 29280,
       totalEarned: 62160,
-      approvedCount: 3,
+      approvedCount: 2,
+      paidCount: 1,
       pendingCount: 2,
       rejectedCount: 1,
     });

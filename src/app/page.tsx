@@ -23,43 +23,43 @@ const stats = [
 
 const trustItems = [
   {
-    title: "Security first",
+    title: "Ưu tiên bảo mật",
     description: "Supabase Auth + RLS + HTTP-only cookies.",
     icon: ShieldCheck,
   },
   {
-    title: "Realtime cashflow",
-    description: "Theo dõi earning, pending và withdraw rõ ràng.",
+    title: "Dòng tiền realtime",
+    description: "Theo dõi thu nhập, chờ đối soát và rút tiền rõ ràng.",
     icon: CircleDollarSign,
   },
   {
-    title: "Fast workflow",
-    description: "Tạo link, copy, share và theo dõi conversion nhanh.",
+    title: "Quy trình nhanh",
+    description: "Tạo Link, sao chép, chia sẻ và theo dõi chuyển đổi nhanh.",
     icon: Workflow,
   },
 ];
 
 const partners = [
-  { name: "Shopee", hint: "Marketplace", accent: "from-orange-500/30 to-rose-500/10" },
-  { name: "Lazada", hint: "Marketplace", accent: "from-sky-500/30 to-blue-500/10" },
-  { name: "TikTok Shop", hint: "Social commerce", accent: "from-fuchsia-500/30 to-violet-500/10" },
-  { name: "Tiki", hint: "Marketplace", accent: "from-emerald-500/30 to-cyan-500/10" },
+  { name: "Shopee", hint: "Sàn thương mại điện tử", accent: "from-orange-500/30 to-rose-500/10" },
+  { name: "Lazada", hint: "Sàn thương mại điện tử", accent: "from-sky-500/30 to-blue-500/10" },
+  { name: "TikTok Shop", hint: "Mua sắm xã hội", accent: "from-fuchsia-500/30 to-violet-500/10" },
+  { name: "Tiki", hint: "Sàn thương mại điện tử", accent: "from-emerald-500/30 to-cyan-500/10" },
 ];
 
 const steps = [
   {
     title: "1. Dán link sản phẩm",
-    description: "Người dùng dán link từ Shopee, Lazada, TikTok Shop hoặc Tiki vào demo converter.",
+    description: "Người dùng dán Link từ Shopee, Lazada, TikTok Shop hoặc Tiki vào trình tạo thử.",
     icon: MousePointerClick,
   },
   {
-    title: "2. Hệ thống tạo affiliate link",
-    description: "Link được nhận diện nền tảng, gắn tracking rồi rút gọn thành short URL.",
+    title: "2. Hệ thống tạo Link tiếp thị",
+    description: "Link được nhận diện nền tảng, gắn theo dõi rồi rút gọn thành URL ngắn.",
     icon: BadgeCheck,
   },
   {
     title: "3. Kiếm & rút tiền",
-    description: "Conversion đổ về dashboard, hoa hồng được phân bổ và user rút tiền về bank.",
+    description: "Kết quả đổ về tổng quan, hoa hồng được phân bổ và user rút tiền về ngân hàng.",
     icon: BarChart3,
   },
 ];
@@ -78,19 +78,18 @@ export default function HomePage() {
           <div className="relative grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
             <div className="space-y-8">
               <div className="flex flex-wrap items-center gap-3">
-                <Badge variant="outline">Cashback platform</Badge>
-                <Badge variant="success">Supabase Auth</Badge>
-                <Badge variant="outline">Dark glassmorphism</Badge>
+                <Badge variant="outline">Nền tảng hoàn tiền</Badge>
+                <Badge variant="success">Đăng nhập Google</Badge>
+                <Badge variant="outline">Glassmorphism tối</Badge>
               </div>
 
               <div className="space-y-4">
                 <h1 className="max-w-3xl text-4xl font-black tracking-tight text-white md:text-6xl text-display">
-                  Kiếm tiền hoàn tiền với giao diện{" "}
-                  <span className="gradient-text">dark glassmorphism</span>
+                  Kiếm tiền hoàn tiền với giao diện đẹp mắt và dễ sử dụng
                 </h1>
                 <p className="max-w-2xl text-base leading-7 text-slate-300 md:text-lg">
-                  Hoàn Tiền Pro là nền tảng cashback affiliate cho phép tạo link nhanh, theo dõi đơn
-                  hàng, quản lý thu nhập và rút tiền trên một workspace tối ưu cho mobile lẫn desktop.
+                  Hoàn Tiền Pro là nền tảng tiếp thị hoàn tiền cho phép tạo Link nhanh, theo dõi đơn
+                  hàng, quản lý thu nhập và rút tiền trên một khu làm việc tối ưu cho mobile lẫn desktop.
                 </p>
               </div>
 
@@ -162,13 +161,9 @@ export default function HomePage() {
               Partner platforms
             </p>
             <h2 className="mt-2 text-3xl font-black text-white text-display">
-              Hỗ trợ các nền tảng affiliate phổ biến
+              Hỗ trợ các nền tảng tiếp thị phổ biến
             </h2>
           </div>
-          <p className="max-w-xl text-sm leading-6 text-slate-400">
-            Mục tiêu giai đoạn đầu là tối ưu trải nghiệm cho các marketplace chính trước khi mở rộng thêm
-            mạng lưới affiliate.
-          </p>
         </div>
 
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
@@ -183,9 +178,6 @@ export default function HomePage() {
                   <Badge variant="outline">{partner.hint}</Badge>
                 </div>
                 <CardTitle className="mt-4 text-xl text-display">{partner.name}</CardTitle>
-                <CardDescription>
-                  Tự động nhận diện URL, tạo tracking link và theo dõi conversion.
-                </CardDescription>
               </CardHeader>
             </Card>
           ))}
@@ -201,10 +193,6 @@ export default function HomePage() {
             <h2 className="mt-2 text-3xl font-black text-white text-display">
               Quy trình thật đơn giản cho người dùng cuối
             </h2>
-            <p className="mt-3 text-sm leading-6 text-slate-400">
-              Landing page ưu tiên một CTA rõ ràng: đăng nhập, dán link, tạo cashback link và bắt đầu
-              tracking.
-            </p>
           </div>
 
           <div className="grid gap-4 lg:grid-cols-3">
@@ -230,32 +218,6 @@ export default function HomePage() {
             })}
           </div>
         </div>
-      </section>
-
-      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-10">
-        <Card className="relative overflow-hidden bg-white/[0.03]">
-          <div className="absolute -right-16 -top-16 h-40 w-40 rounded-full bg-glow-purple blur-3xl" />
-          <CardContent className="relative flex flex-col gap-5 p-6 md:flex-row md:items-center md:justify-between md:p-8">
-            <div className="max-w-2xl">
-              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-violet-300">
-                Ready to ship
-              </p>
-              <h3 className="mt-2 text-2xl font-black text-white text-display md:text-3xl">
-                Một landing page sạch sẽ để bắt đầu thu hút user thật
-              </h3>
-              <p className="mt-3 text-sm leading-6 text-slate-400">
-                Sprint 1.1 tập trung vào trải nghiệm công khai: rõ ràng, sang, và đủ tốt để dẫn người dùng
-                vào luồng đăng nhập Google.
-              </p>
-            </div>
-            <Link
-              href="/login"
-              className="inline-flex h-12 items-center justify-center rounded-xl bg-white px-6 text-sm font-semibold text-slate-950 transition-transform hover:scale-[1.02]"
-            >
-              Đi tới đăng nhập
-            </Link>
-          </CardContent>
-        </Card>
       </section>
 
       <Footer

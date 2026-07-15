@@ -1,6 +1,5 @@
 import { OrdersTable } from "@/components/features/orders/orders-table";
 import { OrdersToolbar } from "@/components/features/orders/orders-toolbar";
-import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { createClient } from "@/lib/db/server";
 import {
@@ -12,6 +11,7 @@ import {
   type OrderRecord,
 } from "@/lib/orders";
 import { redirect } from "next/navigation";
+import { Progress } from "@/components/ui/progress";
 
 type SearchParams = {
   platform?: string;
@@ -100,42 +100,29 @@ export default async function OrdersPage({
   const totalPages = Math.max(1, Math.ceil(filteredOrders.length / pageSize));
   const visibleOrders = paginateOrders(filteredOrders, currentPage, pageSize);
   const stats = calculateOrderStats(filteredOrders);
-  const usingDemoData = mappedOrders.length === 0;
   const origin = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+  const withdrawalGoal = 50000;
+  const progressValue = Math.min(stats.available, withdrawalGoal);
 
   return (
     <div className="space-y-6">
-      <Card className="bg-white/[0.03]">
-        <CardHeader>
-          <div className="flex flex-wrap items-center gap-3">
-            <Badge variant={usingDemoData ? "warning" : "success"}>
-              {usingDemoData ? "Demo data" : "Live data"}
-            </Badge>
-            <Badge variant="outline">Sprint 1.4</Badge>
-          </div>
-          <CardTitle className="mt-3 text-display text-3xl">Đơn Hàng</CardTitle>
-          <CardDescription>
-            Lịch sử đơn hàng, filter theo platform/status/date và phân trang 20 items/page.
-          </CardDescription>
-        </CardHeader>
-      </Card>
 
       <section className="grid gap-4 md:grid-cols-3">
         <Card className="bg-white/[0.03]">
           <CardContent className="px-5 py-5">
-            <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Available</p>
+            <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Số dư khả dụng</p>
             <p className="mt-2 text-3xl font-black text-white text-display">{formatVnd(stats.available)}</p>
           </CardContent>
         </Card>
         <Card className="bg-white/[0.03]">
           <CardContent className="px-5 py-5">
-            <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Pending</p>
+            <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Chờ đối soát</p>
             <p className="mt-2 text-3xl font-black text-white text-display">{formatVnd(stats.pending)}</p>
           </CardContent>
         </Card>
         <Card className="bg-white/[0.03]">
           <CardContent className="px-5 py-5">
-            <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Total Earned</p>
+            <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Tổng thu nhập</p>
             <p className="mt-2 text-3xl font-black text-white text-display">{formatVnd(stats.totalEarned)}</p>
           </CardContent>
         </Card>
@@ -154,14 +141,11 @@ export default async function OrdersPage({
         <CardHeader>
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
-              <CardTitle className="text-display text-2xl">Recent orders</CardTitle>
+              <CardTitle className="text-display text-2xl">Đơn hàng gần đây</CardTitle>
               <CardDescription>
                 {filteredOrders.length} đơn hàng phù hợp với bộ lọc hiện tại.
               </CardDescription>
             </div>
-            <Badge variant="outline">
-              Page {currentPage} / {totalPages}
-            </Badge>
           </div>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -169,7 +153,7 @@ export default async function OrdersPage({
             <OrdersTable orders={visibleOrders} origin={origin} />
           ) : (
             <div className="rounded-2xl border border-dashed border-white/10 bg-white/[0.02] p-8 text-sm text-slate-400">
-              Không có đơn hàng phù hợp. Hãy thử đổi filter hoặc tạo thêm data từ webhook.
+              Không có đơn hàng phù hợp. Hãy thử đổi bộ lọc hoặc tạo thêm dữ liệu từ webhook.
             </div>
           )}
 
@@ -183,7 +167,7 @@ export default async function OrdersPage({
                   href={buildPageLink(new URL(origin + "/app/orders"), filters, currentPage - 1)}
                   className="inline-flex h-10 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] px-4 text-sm font-semibold text-slate-200 transition-colors hover:bg-white/[0.08]"
                 >
-                  Previous
+                  Trước
                 </a>
               ) : null}
               {currentPage < totalPages ? (
@@ -191,7 +175,7 @@ export default async function OrdersPage({
                   href={buildPageLink(new URL(origin + "/app/orders"), filters, currentPage + 1)}
                   className="inline-flex h-10 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] px-4 text-sm font-semibold text-slate-200 transition-colors hover:bg-white/[0.08]"
                 >
-                  Next
+                  Sau
                 </a>
               ) : null}
             </div>

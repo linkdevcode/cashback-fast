@@ -3,8 +3,8 @@ import { FeaturePlaceholder } from "@/components/features/app/feature-placeholde
 export default function ReferralsPage() {
   return (
     <FeaturePlaceholder
-      title="Giới Thiệu"
-      description="Referral dashboard sẽ theo dõi link giới thiệu, friend list và referral commissions."
+      title="Mời bạn bè"
+      description="Khu vực này sẽ theo dõi link giới thiệu, danh sách bạn bè và hoa hồng referral."
     />
   );
 }

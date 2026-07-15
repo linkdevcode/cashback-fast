@@ -1,4 +1,4 @@
-export type OrderStatus = "pending" | "approved" | "rejected";
+export type OrderStatus = "pending" | "approved" | "rejected" | "paid";
 
 export type OrderPlatform = {
   code: string;
@@ -37,6 +37,7 @@ export type OrderStats = {
   pending: number;
   totalEarned: number;
   approvedCount: number;
+  paidCount: number;
   pendingCount: number;
   rejectedCount: number;
 };
@@ -45,12 +46,13 @@ export const ORDER_STATUS_META: Record<
   OrderStatus,
   {
     label: string;
-    variant: "success" | "warning" | "danger";
+    variant: "success" | "warning" | "danger" | "info";
   }
 > = {
-  pending: { label: "Pending", variant: "warning" },
-  approved: { label: "Approved", variant: "success" },
-  rejected: { label: "Rejected", variant: "danger" },
+  pending: { label: "Chờ xử lý", variant: "warning" },
+  approved: { label: "Đã đối soát", variant: "success" },
+  rejected: { label: "Bị hủy", variant: "danger" },
+  paid: { label: "Đã thanh toán", variant: "info" },
 };
 
 export const DEMO_ORDERS: OrderRecord[] = [
@@ -101,7 +103,7 @@ export const DEMO_ORDERS: OrderRecord[] = [
     commission_total: 31000,
     user_commission: 24800,
     platform_commission: 6200,
-    status: "approved",
+    status: "paid",
     click_time: "2026-07-13T09:00:00.000Z",
     conversion_time: "2026-07-13T09:10:00.000Z",
     audit_date: "2026-07-20T00:00:00.000Z",
@@ -228,6 +230,12 @@ export function calculateOrderStats(orders: OrderRecord[]): OrderStats {
         acc.approvedCount += 1;
       }
 
+      if (order.status === "paid") {
+        acc.available += order.user_commission;
+        acc.totalEarned += order.user_commission;
+        acc.paidCount += 1;
+      }
+
       if (order.status === "pending") {
         acc.pending += order.user_commission;
         acc.pendingCount += 1;
@@ -244,6 +252,7 @@ export function calculateOrderStats(orders: OrderRecord[]): OrderStats {
       pending: 0,
       totalEarned: 0,
       approvedCount: 0,
+      paidCount: 0,
       pendingCount: 0,
       rejectedCount: 0,
     }

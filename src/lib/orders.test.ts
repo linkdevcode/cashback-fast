@@ -11,16 +11,20 @@ import {
 describe("orders helpers", () => {
   it("returns the correct status metadata", () => {
     expect(getOrderStatusMeta("pending")).toEqual({
-      label: "Pending",
+      label: "Chờ xử lý",
       variant: "warning",
     });
     expect(getOrderStatusMeta("approved")).toEqual({
-      label: "Approved",
+      label: "Đã đối soát",
       variant: "success",
     });
     expect(getOrderStatusMeta("rejected")).toEqual({
-      label: "Rejected",
+      label: "Bị hủy",
       variant: "danger",
+    });
+    expect(getOrderStatusMeta("paid")).toEqual({
+      label: "Đã thanh toán",
+      variant: "info",
     });
   });
 
@@ -52,7 +56,8 @@ describe("orders helpers", () => {
       available: 62160,
       pending: 29280,
       totalEarned: 62160,
-      approvedCount: 3,
+      approvedCount: 2,
+      paidCount: 1,
       pendingCount: 2,
       rejectedCount: 1,
     });

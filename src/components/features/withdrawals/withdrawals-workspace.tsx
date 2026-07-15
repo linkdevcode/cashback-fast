@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { Progress } from "@/components/ui/progress";
 import { Select } from "@/components/ui/select";
 import {
   Table,
@@ -30,7 +31,6 @@ type WithdrawalsWorkspaceProps = {
   banks: BankAccount[];
   withdrawals: WithdrawalRecord[];
   summary: WithdrawalSummary;
-  usingDemoData: boolean;
 };
 
 type MessageState =
@@ -38,7 +38,7 @@ type MessageState =
   | null;
 
 function getDisplayBank(bank?: BankAccount | null) {
-  if (!bank) return "Unknown bank";
+  if (!bank) return "Ngân hàng không xác định";
   return `${bank.bank_name} · ${bank.account_number}`;
 }
 
@@ -46,7 +46,6 @@ export function WithdrawalsWorkspace({
   banks,
   withdrawals,
   summary,
-  usingDemoData,
 }: WithdrawalsWorkspaceProps) {
   const router = useRouter();
   const [message, setMessage] = useState<MessageState>(null);
@@ -116,27 +115,13 @@ export function WithdrawalsWorkspace({
 
   return (
     <div className="space-y-6">
-      <Card className="bg-white/[0.03]">
-        <CardHeader>
-          <div className="flex flex-wrap items-center gap-3">
-            <Badge variant={usingDemoData ? "warning" : "success"}>
-              {usingDemoData ? "Demo data" : "Live data"}
-            </Badge>
-            <Badge variant="outline">Sprint 1.6</Badge>
-          </div>
-          <CardTitle className="mt-3 text-display text-3xl">Rút Tiền</CardTitle>
-          <CardDescription>
-            Quản lý bank account, tạo withdrawal request và theo dõi trạng thái xử lý.
-          </CardDescription>
-        </CardHeader>
-      </Card>
 
       {message ? <Toast title={message.title} description={message.description} variant={message.variant} /> : null}
 
       <section className="grid gap-4 md:grid-cols-3">
         <Card className="bg-white/[0.03]">
           <CardContent className="px-5 py-5">
-            <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Available balance</p>
+            <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Số dư khả dụng</p>
             <p className="mt-2 text-3xl font-black text-white text-display">
               {formatWithdrawalAmount(summary.availableBalance)}
             </p>
@@ -144,7 +129,7 @@ export function WithdrawalsWorkspace({
         </Card>
         <Card className="bg-white/[0.03]">
           <CardContent className="px-5 py-5">
-            <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Pending payout</p>
+            <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Chờ chi trả</p>
             <p className="mt-2 text-3xl font-black text-white text-display">
               {formatWithdrawalAmount(summary.pendingBalance)}
             </p>
@@ -152,7 +137,7 @@ export function WithdrawalsWorkspace({
         </Card>
         <Card className="bg-white/[0.03]">
           <CardContent className="px-5 py-5">
-            <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Total withdrawn</p>
+            <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Tổng đã rút</p>
             <p className="mt-2 text-3xl font-black text-white text-display">
               {formatWithdrawalAmount(summary.withdrawnBalance)}
             </p>
@@ -163,19 +148,20 @@ export function WithdrawalsWorkspace({
       <section className="grid gap-6 xl:grid-cols-[1fr_1.2fr]">
         <Card className="bg-white/[0.03]">
           <CardHeader>
-            <CardTitle className="text-display text-2xl">Withdrawal request</CardTitle>
+            <CardTitle className="text-display text-2xl">Yêu cầu rút tiền</CardTitle>
             <CardDescription>
-              Min {formatWithdrawalAmount(MIN_WITHDRAWAL_AMOUNT)} · Max {formatWithdrawalAmount(summary.availableBalance)}
+              Tối thiểu {formatWithdrawalAmount(MIN_WITHDRAWAL_AMOUNT)} · Tối đa{" "}
+              {formatWithdrawalAmount(summary.availableBalance)}
             </CardDescription>
           </CardHeader>
           <CardContent>
             <form className="space-y-4" onSubmit={submitWithdrawal}>
               <label className="space-y-2">
                 <span className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-400">
-                  Select bank
+                  Chọn ngân hàng
                 </span>
                 <Select value={selectedBankId} onChange={(event) => setSelectedBankId(event.target.value)}>
-                  <option value="">Choose a bank</option>
+                  <option value="">Chọn ngân hàng</option>
                   {banks.map((bank) => (
                     <option key={bank.id} value={bank.id}>
                       {bank.bank_name} · {bank.account_number}
@@ -186,7 +172,7 @@ export function WithdrawalsWorkspace({
 
               <label className="space-y-2">
                 <span className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-400">
-                  Amount (VND)
+                  Số tiền (VND)
                 </span>
                 <Input
                   type="number"
@@ -208,12 +194,12 @@ export function WithdrawalsWorkspace({
 
               <label className="space-y-2">
                 <span className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-400">
-                  Notes
+                  Ghi chú
                 </span>
                 <Input
                   value={withdrawalForm.notes}
                   onChange={(event) => setWithdrawalForm((current) => ({ ...current, notes: event.target.value }))}
-                  placeholder="Optional note for admin"
+                  placeholder="Ghi chú tùy chọn"
                 />
               </label>
 
@@ -221,13 +207,14 @@ export function WithdrawalsWorkspace({
                 type="submit"
                 disabled={loadingAction === "withdrawal" || !selectedBankId || summary.availableBalance < MIN_WITHDRAWAL_AMOUNT}
               >
-                Create withdrawal request
+                Tạo yêu cầu rút tiền
               </Button>
             </form>
 
             {defaultBank ? (
               <div className="mt-4 rounded-2xl border border-white/10 bg-white/[0.02] p-4 text-sm text-slate-300">
-                Bank mặc định hiện tại: <span className="font-semibold text-white">{getDisplayBank(defaultBank)}</span>
+                Ngân hàng mặc định hiện tại:{" "}
+                <span className="font-semibold text-white">{getDisplayBank(defaultBank)}</span>
               </div>
             ) : null}
           </CardContent>
@@ -237,20 +224,20 @@ export function WithdrawalsWorkspace({
           <CardHeader>
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div>
-                <CardTitle className="text-display text-2xl">Withdrawal history</CardTitle>
+                <CardTitle className="text-display text-2xl">Lịch sử rút tiền</CardTitle>
                 <CardDescription>Trạng thái xử lý của các yêu cầu rút tiền gần nhất.</CardDescription>
               </div>
-              <Badge variant="outline">{withdrawals.length} records</Badge>
+              <Badge variant="outline">{withdrawals.length} mục</Badge>
             </div>
           </CardHeader>
           <CardContent>
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Amount</TableHead>
-                  <TableHead>Bank</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Created</TableHead>
+                  <TableHead>Số tiền</TableHead>
+                  <TableHead>Ngân hàng</TableHead>
+                  <TableHead>Trạng thái</TableHead>
+                  <TableHead>Ngày tạo</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -262,13 +249,13 @@ export function WithdrawalsWorkspace({
                       <TableCell>
                         <div className="space-y-1">
                           <p className="font-semibold text-white">{formatWithdrawalAmount(withdrawal.amount)}</p>
-                          <p className="text-xs text-slate-500">Net {formatWithdrawalAmount(withdrawal.net_amount)}</p>
+                          <p className="text-xs text-slate-500">Thực nhận {formatWithdrawalAmount(withdrawal.net_amount)}</p>
                         </div>
                       </TableCell>
                       <TableCell>
                         <div className="space-y-1">
                           <p className="font-semibold text-white">{getDisplayBank(withdrawal.bank)}</p>
-                          <p className="text-xs text-slate-500">{withdrawal.notes || "No notes"}</p>
+                          <p className="text-xs text-slate-500">{withdrawal.notes || "Không có ghi chú"}</p>
                         </div>
                       </TableCell>
                       <TableCell>
@@ -288,9 +275,9 @@ export function WithdrawalsWorkspace({
 
       <Card className="bg-white/[0.03]">
         <CardHeader>
-          <CardTitle className="text-display text-2xl">Manage bank accounts</CardTitle>
+          <CardTitle className="text-display text-2xl">Quản lý ngân hàng</CardTitle>
           <CardDescription>
-            Thêm, xóa và cấu hình bank accounts đã được chuyển sang Settings để giữ màn Withdraw gọn hơn.
+            Thêm, xóa và cấu hình ngân hàng đã được chuyển sang Cài đặt để giữ màn Rút Tiền gọn hơn.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -298,7 +285,7 @@ export function WithdrawalsWorkspace({
             href="/app/settings"
             className="inline-flex h-11 items-center justify-center rounded-xl bg-gradient-to-r from-violet-500 to-emerald-500 px-4 text-sm font-semibold text-white transition-opacity hover:opacity-95"
           >
-            Đi tới Settings
+            Đi tới Cài đặt
           </a>
         </CardContent>
       </Card>

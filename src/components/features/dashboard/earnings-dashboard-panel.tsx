@@ -2,6 +2,7 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { formatVnd, type OrderStatus } from "@/lib/orders";
 import { EARNINGS_RANGES, type EarningsActivityItem, type EarningsHistoryPoint, type EarningsPlatformBreakdown, type EarningsRange } from "@/lib/earnings";
@@ -23,13 +24,14 @@ type EarningsDashboardPanelProps = {
   historyByRange: Record<EarningsRange, EarningsHistoryPoint[]>;
   platforms: EarningsPlatformBreakdown[];
   recentActivity: EarningsActivityItem[];
-  usingDemoData: boolean;
 };
 
 function getStatusTone(status: OrderStatus) {
   switch (status) {
     case "approved":
       return "success";
+    case "paid":
+      return "info";
     case "pending":
       return "warning";
     case "rejected":
@@ -39,17 +41,26 @@ function getStatusTone(status: OrderStatus) {
   }
 }
 
+function formatAxisTick(value: number) {
+  return value === 0 ? "0" : `${Math.round(value / 1000)}k`;
+}
+
 function buildChartGeometry(points: EarningsHistoryPoint[]) {
-  const width = 640;
-  const height = 240;
-  const padding = 20;
-  const innerWidth = width - padding * 2;
-  const innerHeight = height - padding * 2;
+  const width = 720;
+  const height = 280;
+  const paddingTop = 18;
+  const paddingRight = 18;
+  const paddingBottom = 40;
+  const paddingLeft = 58;
+  const innerWidth = width - paddingLeft - paddingRight;
+  const innerHeight = height - paddingTop - paddingBottom;
   const maxValue = Math.max(...points.map((point) => point.value), 1);
+  const maxTick = Math.max(10000, Math.ceil(maxValue / 10000) * 10000);
+  const yTicks = Array.from({ length: maxTick / 10000 + 1 }, (_, index) => index * 10000);
   const stepX = points.length > 1 ? innerWidth / (points.length - 1) : 0;
   const coordinates = points.map((point, index) => {
-    const x = padding + stepX * index;
-    const y = padding + innerHeight - (point.value / maxValue) * innerHeight;
+    const x = paddingLeft + stepX * index;
+    const y = paddingTop + innerHeight - (point.value / maxTick) * innerHeight;
     return { x, y };
   });
 
@@ -57,16 +68,20 @@ function buildChartGeometry(points: EarningsHistoryPoint[]) {
     ? coordinates.map((point, index) => `${index === 0 ? "M" : "L"} ${point.x} ${point.y}`).join(" ")
     : "";
   const areaPath = coordinates.length
-    ? `${linePath} L ${coordinates[coordinates.length - 1].x} ${height - padding} L ${coordinates[0].x} ${height - padding} Z`
+    ? `${linePath} L ${coordinates[coordinates.length - 1].x} ${paddingTop + innerHeight} L ${coordinates[0].x} ${paddingTop + innerHeight} Z`
     : "";
 
   return {
     width,
     height,
-    padding,
+    paddingTop,
+    paddingRight,
+    paddingBottom,
+    paddingLeft,
     innerWidth,
     innerHeight,
-    maxValue,
+    maxTick,
+    yTicks,
     coordinates,
     linePath,
     areaPath,
@@ -84,29 +99,37 @@ function EarningsChart({ points }: { points: EarningsHistoryPoint[] }) {
     );
   }
 
-  const tickStep = Math.max(1, Math.ceil(points.length / 6));
+  const xLabelStep = Math.max(1, Math.ceil(points.length / 4));
 
   return (
     <div className="space-y-4">
-      <div className="rounded-2xl border border-white/10 bg-slate-950/40 p-4">
-        <svg viewBox={`0 0 ${geometry.width} ${geometry.height}`} className="h-[260px] w-full">
-          {[0, 1, 2, 3].map((line) => {
-            const y = geometry.padding + (geometry.innerHeight / 3) * line;
+      <div className="overflow-hidden rounded-2xl border border-white/10 bg-slate-950/40 p-4">
+        <svg viewBox={`0 0 ${geometry.width} ${geometry.height}`} className="h-[280px] w-full">
+          {geometry.yTicks.map((tick) => {
+            const y = geometry.paddingTop + geometry.innerHeight - (tick / geometry.maxTick) * geometry.innerHeight;
             return (
-              <line
-                key={line}
-                x1={geometry.padding}
-                x2={geometry.width - geometry.padding}
-                y1={y}
-                y2={y}
-                stroke="rgba(255,255,255,0.08)"
-                strokeWidth="1"
-              />
+              <g key={tick}>
+                <line
+                  x1={geometry.paddingLeft}
+                  x2={geometry.width - geometry.paddingRight}
+                  y1={y}
+                  y2={y}
+                  stroke="rgba(255,255,255,0.08)"
+                  strokeWidth="1"
+                />
+                <text
+                  x={geometry.paddingLeft - 12}
+                  y={y + 4}
+                  textAnchor="end"
+                  className="fill-slate-400 text-[11px]"
+                >
+                  {formatAxisTick(tick)}
+                </text>
+              </g>
             );
           })}
-          {geometry.areaPath ? (
-            <path d={geometry.areaPath} fill="url(#earningsFill)" stroke="none" />
-          ) : null}
+
+          {geometry.areaPath ? <path d={geometry.areaPath} fill="url(#earningsFill)" stroke="none" /> : null}
           {geometry.linePath ? (
             <path
               d={geometry.linePath}
@@ -117,24 +140,34 @@ function EarningsChart({ points }: { points: EarningsHistoryPoint[] }) {
               strokeLinejoin="round"
             />
           ) : null}
+
           {geometry.coordinates.map((point, index) => {
             const value = points[index]?.value || 0;
+            const label = points[index]?.label || "";
+
             return (
               <g key={points[index]?.date || index}>
-                <circle cx={point.x} cy={point.y} r="4.5" fill="#A855F7" stroke="#0F172A" strokeWidth="2" />
-                {value > 0 ? (
-                  <text
-                    x={point.x}
-                    y={point.y - 12}
-                    textAnchor="middle"
-                    className="fill-slate-200 text-[11px]"
-                  >
-                    {formatVnd(value)}
-                  </text>
-                ) : null}
+                <circle cx={point.x} cy={point.y} r="4.5" fill="#A855F7" stroke="#0F172A" strokeWidth="2">
+                  <title>{`${label} · ${formatVnd(value)}`}</title>
+                </circle>
               </g>
             );
           })}
+
+          {points.map((point, index) =>
+            index % xLabelStep === 0 || index === points.length - 1 ? (
+              <text
+                key={point.date}
+                x={geometry.coordinates[index]?.x || geometry.paddingLeft}
+                y={geometry.height - 12}
+                textAnchor="middle"
+                className="fill-slate-400 text-[11px]"
+              >
+                {point.label}
+              </text>
+            ) : null
+          )}
+
           <defs>
             <linearGradient id="earningsStroke" x1="0%" y1="0%" x2="100%" y2="0%">
               <stop offset="0%" stopColor="#A855F7" />
@@ -147,16 +180,6 @@ function EarningsChart({ points }: { points: EarningsHistoryPoint[] }) {
           </defs>
         </svg>
       </div>
-
-      <div className="flex flex-wrap gap-3 text-xs text-slate-400">
-        {points.map((point, index) =>
-          index % tickStep === 0 || index === points.length - 1 ? (
-            <span key={point.date} className="rounded-full border border-white/10 bg-white/[0.03] px-3 py-1">
-              {point.label}
-            </span>
-          ) : null
-        )}
-      </div>
     </div>
   );
 }
@@ -166,7 +189,6 @@ export function EarningsDashboardPanel({
   historyByRange,
   platforms,
   recentActivity,
-  usingDemoData,
 }: EarningsDashboardPanelProps) {
   const [range, setRange] = useState<EarningsRange>(7);
   const points = historyByRange[range];
@@ -189,38 +211,23 @@ export function EarningsDashboardPanel({
 
   return (
     <div className="space-y-6">
-      <Card className="bg-white/[0.03]">
-        <CardHeader>
-          <div className="flex flex-wrap items-center gap-3">
-            <Badge variant={usingDemoData ? "warning" : "success"}>
-              {usingDemoData ? "Demo data" : "Live data"}
-            </Badge>
-            <Badge variant="outline">Sprint 1.5</Badge>
-          </div>
-          <CardTitle className="mt-3 text-display text-3xl">Earnings Dashboard</CardTitle>
-          <CardDescription>
-            Theo dõi Available / Pending / Total Earned, biểu đồ thu nhập 7/30/90 ngày và các nền tảng đang
-            hoạt động tốt nhất.
-          </CardDescription>
-        </CardHeader>
-      </Card>
 
       <section className="grid gap-4 md:grid-cols-3">
         <Card className="bg-white/[0.03]">
           <CardContent className="px-5 py-5">
-            <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Available</p>
+            <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Số dư khả dụng</p>
             <p className="mt-2 text-3xl font-black text-white text-display">{formatVnd(summary.available)}</p>
           </CardContent>
         </Card>
         <Card className="bg-white/[0.03]">
           <CardContent className="px-5 py-5">
-            <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Pending</p>
+            <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Chờ đối soát</p>
             <p className="mt-2 text-3xl font-black text-white text-display">{formatVnd(summary.pending)}</p>
           </CardContent>
         </Card>
         <Card className="bg-white/[0.03]">
           <CardContent className="px-5 py-5">
-            <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Total Earned</p>
+            <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Tổng thu nhập</p>
             <p className="mt-2 text-3xl font-black text-white text-display">{formatVnd(summary.totalEarned)}</p>
           </CardContent>
         </Card>
@@ -231,7 +238,7 @@ export function EarningsDashboardPanel({
           <CardHeader>
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div>
-                <CardTitle className="text-display text-2xl">Earnings chart</CardTitle>
+                <CardTitle className="text-display text-2xl">Biểu đồ thu nhập</CardTitle>
                 <CardDescription>Biểu đồ doanh thu theo ngày, chuyển đổi giữa 7 / 30 / 90 ngày.</CardDescription>
               </div>
               <Tabs>
@@ -250,17 +257,19 @@ export function EarningsDashboardPanel({
 
             <div className="grid gap-3 md:grid-cols-3">
               <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-4">
-                <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Tổng earnings</p>
+                <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Tổng thu nhập</p>
                 <p className="mt-2 text-lg font-semibold text-white">{formatVnd(chartStats.total)}</p>
               </div>
               <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-4">
-                <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Daily average</p>
+                <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Trung bình mỗi ngày</p>
                 <p className="mt-2 text-lg font-semibold text-white">{formatVnd(chartStats.average)}</p>
               </div>
               <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-4">
-                <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Best day</p>
+                <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Ngày tốt nhất</p>
                 <p className="mt-2 text-lg font-semibold text-white">
-                  {chartStats.bestDay ? `${chartStats.bestDay.label} · ${formatVnd(chartStats.bestDay.value)}` : "N/A"}
+                  {chartStats.bestDay
+                    ? `${chartStats.bestDay.label} · ${formatVnd(chartStats.bestDay.value)}`
+                    : "Không có"}
                 </p>
               </div>
             </div>
@@ -270,8 +279,8 @@ export function EarningsDashboardPanel({
         <div className="space-y-6">
           <Card className="bg-white/[0.03]">
             <CardHeader>
-              <CardTitle className="text-display text-2xl">Top performing platforms</CardTitle>
-              <CardDescription>Phân bổ earnings từ các nền tảng đang đóng góp nhiều nhất.</CardDescription>
+              <CardTitle className="text-display text-2xl">Nền tảng hiệu quả nhất</CardTitle>
+              <CardDescription>Phân bổ thu nhập từ các nền tảng đang đóng góp nhiều nhất.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               {platforms.length > 0 ? (
@@ -280,7 +289,7 @@ export function EarningsDashboardPanel({
                     <div className="flex items-center justify-between gap-3">
                       <div>
                         <p className="font-semibold text-white">{platform.name}</p>
-                        <p className="text-xs text-slate-400">{platform.orderCount} approved orders</p>
+                        <p className="text-xs text-slate-400">{platform.orderCount} đơn đã đối soát</p>
                       </div>
                       <div className="text-right">
                         <p className="text-sm font-semibold text-white">{formatVnd(platform.amount)}</p>
@@ -305,8 +314,8 @@ export function EarningsDashboardPanel({
 
           <Card className="bg-white/[0.03]">
             <CardHeader>
-              <CardTitle className="text-display text-2xl">Recent activity</CardTitle>
-              <CardDescription>Những thay đổi earnings gần nhất trong tài khoản.</CardDescription>
+              <CardTitle className="text-display text-2xl">Hoạt động gần đây</CardTitle>
+              <CardDescription>Những thay đổi thu nhập gần nhất trong tài khoản.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               {recentActivity.length > 0 ? (
@@ -337,7 +346,7 @@ export function EarningsDashboardPanel({
 
       <Card className="bg-white/[0.03]">
         <CardHeader>
-          <CardTitle className="text-display text-2xl">Quick actions</CardTitle>
+          <CardTitle className="text-display text-2xl">Thao tác nhanh</CardTitle>
           <CardDescription>Đi nhanh tới flow tạo link, kiểm tra đơn hoặc chuẩn bị rút tiền.</CardDescription>
         </CardHeader>
         <CardContent className="flex flex-wrap gap-3">

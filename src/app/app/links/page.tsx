@@ -1,6 +1,5 @@
 import { LinkGeneratorPanel } from "@/components/features/links/link-generator-panel";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { createClient } from "@/lib/db/server";
 import { redirect } from "next/navigation";
 
@@ -33,17 +32,6 @@ export default async function LinksPage() {
 
   return (
     <div className="space-y-6">
-      <Card className="bg-white/[0.03]">
-        <CardHeader>
-          <Badge variant="outline" className="w-fit">
-            Sprint 1.3
-          </Badge>
-          <CardTitle className="mt-3 text-display text-3xl">Tạo link affiliate</CardTitle>
-          <CardDescription>
-            Auto-detect nền tảng, tạo short link và lưu lịch sử 50 link gần nhất.
-          </CardDescription>
-        </CardHeader>
-      </Card>
 
       <LinkGeneratorPanel
         platforms={(platforms ?? []) as Array<{ id: string; name: string; code: string; base_url: string }>}

@@ -13,13 +13,13 @@ type NavItem = {
 };
 
 const defaultNavItems: NavItem[] = [
-  { label: "Dashboard", href: "/app/dashboard" },
+  { label: "Tổng quan", href: "/app/dashboard" },
   { label: "Tạo Link", href: "/app/links" },
   { label: "Đơn Hàng", href: "/app/orders" },
   { label: "Rút Tiền", href: "/app/withdrawals" },
-  { label: "Giới Thiệu", href: "/app/referrals" },
-  { label: "Khiếu Nại", href: "/app/claims" },
-  { label: "Settings", href: "/app/settings" },
+  { label: "Mời bạn bè", href: "/app/referrals" },
+  { label: "Hỗ trợ & khiếu nại", href: "/app/claims" },
+  { label: "Cài đặt", href: "/app/settings" },
 ];
 
 export function Sidebar({ items = defaultNavItems }: { items?: NavItem[] }) {
@@ -31,7 +31,6 @@ export function Sidebar({ items = defaultNavItems }: { items?: NavItem[] }) {
         <p className="text-xs font-semibold uppercase tracking-[0.3em] text-violet-300">
           Hoàn Tiền Pro
         </p>
-        <h2 className="mt-2 text-2xl font-black text-white">Workspace</h2>
       </div>
 
       <nav className="space-y-2">

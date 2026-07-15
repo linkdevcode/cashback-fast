@@ -27,13 +27,13 @@ export function OrdersTable({ orders, origin, onDelete, deletingId }: OrdersTabl
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Order</TableHead>
-            <TableHead>Platform</TableHead>
-            <TableHead>Value</TableHead>
-            <TableHead>Commission</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Created</TableHead>
-            <TableHead className="text-right">Actions</TableHead>
+            <TableHead>Đơn hàng</TableHead>
+            <TableHead>Nền tảng</TableHead>
+            <TableHead>Giá trị</TableHead>
+            <TableHead>Hoa hồng</TableHead>
+            <TableHead>Trạng thái</TableHead>
+            <TableHead>Ngày tạo</TableHead>
+            <TableHead className="text-right">Thao tác</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -74,13 +74,14 @@ export function OrdersTable({ orders, origin, onDelete, deletingId }: OrdersTabl
                     onClick={() =>
                       navigator.clipboard.writeText(`${origin}/app/orders?id=${order.id}`)
                     }
+                    aria-label="Sao chép liên kết đơn hàng"
                   >
                     <Copy className="h-4 w-4" />
                   </Button>
                   <Link
                     href={`/app/orders/${order.id}`}
                     className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] text-slate-200 transition-colors hover:bg-white/[0.08]"
-                    aria-label="Open order details"
+                    aria-label="Xem chi tiết đơn hàng"
                   >
                     <ExternalLink className="h-4 w-4" />
                   </Link>

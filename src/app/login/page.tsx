@@ -20,19 +20,12 @@ export default function LoginPage({ searchParams }: LoginPageProps) {
           <h1 className="text-3xl font-black tracking-tight text-white md:text-4xl">
             Đăng nhập để tiếp tục
           </h1>
-          <p className="text-sm leading-6 text-slate-300">
-            Supabase Auth sẽ xử lý Google OAuth và tự đồng bộ hồ sơ user vào hệ thống.
-          </p>
         </div>
 
         <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
           <div className="space-y-3">
             <p className="text-xs uppercase tracking-[0.24em] text-slate-400">
               Bảo mật qua Supabase
-            </p>
-            <p className="text-sm leading-6 text-slate-300">
-              Chỉ cần đăng nhập bằng Google, callback sẽ tạo hoặc cập nhật profile trong
-              `public.users`, rồi đưa bạn vào workspace.
             </p>
           </div>
 

@@ -10,7 +10,7 @@ export default async function DashboardPage() {
     redirect("/login?redirect=/app/dashboard");
   }
 
-  const { orders, usingDemoData } = await loadEarningsOrders(supabase, user.id);
+  const { orders } = await loadEarningsOrders(supabase, user.id);
   const summary = calculateEarningsSummary(orders);
   const historyByRange = buildEarningsHistoryByRange(orders);
   const platforms = buildPlatformBreakdown(orders);
@@ -22,7 +22,6 @@ export default async function DashboardPage() {
       historyByRange={historyByRange}
       platforms={platforms}
       recentActivity={recentActivity}
-      usingDemoData={usingDemoData}
     />
   );
 }

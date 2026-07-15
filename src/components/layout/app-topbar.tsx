@@ -1,7 +1,6 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Menu } from "lucide-react";
 import { UserMenu } from "./user-menu";
 import { usePathname } from "next/navigation";
@@ -18,18 +17,19 @@ export function AppTopbar({
   name,
   email,
   avatarUrl,
-  title = "Dashboard",
+  title = "Tổng quan",
   onMenuClick,
 }: AppTopbarProps) {
   const pathname = usePathname();
 
   const derivedTitle = (() => {
+    if (pathname.startsWith("/app/dashboard")) return "Tổng quan";
     if (pathname.startsWith("/app/links")) return "Tạo Link";
     if (pathname.startsWith("/app/orders")) return "Đơn Hàng";
     if (pathname.startsWith("/app/withdrawals")) return "Rút Tiền";
-    if (pathname.startsWith("/app/referrals")) return "Giới Thiệu";
-    if (pathname.startsWith("/app/claims")) return "Khiếu Nại";
-    if (pathname.startsWith("/app/settings")) return "Settings";
+    if (pathname.startsWith("/app/referrals")) return "Mời bạn bè";
+    if (pathname.startsWith("/app/claims")) return "Hỗ trợ & khiếu nại";
+    if (pathname.startsWith("/app/settings")) return "Cài đặt";
     return title;
   })();
 
@@ -43,7 +43,7 @@ export function AppTopbar({
               size="sm"
               className="md:hidden"
               onClick={onMenuClick}
-              aria-label="Open menu"
+              aria-label="Mở menu"
             >
               <Menu className="h-4 w-4" />
             </Button>
@@ -53,9 +53,6 @@ export function AppTopbar({
               <h1 className="text-xl font-black text-white md:text-2xl text-display">
                 {derivedTitle}
               </h1>
-              <Badge variant="outline" className="hidden sm:inline-flex">
-                Workspace
-              </Badge>
             </div>
             <p className="mt-1 text-sm text-slate-400">Xin chào, {name}</p>
           </div>

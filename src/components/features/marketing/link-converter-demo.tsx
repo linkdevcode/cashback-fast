@@ -3,7 +3,6 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
 import { Toast } from "@/components/ui/toast";
 import { Check, Copy, ExternalLink, Link2, Loader2, Sparkles } from "lucide-react";
 import { useMemo, useState } from "react";
@@ -72,15 +71,12 @@ export function LinkConverterDemo() {
           <div>
             <CardTitle className="flex items-center gap-2">
               <Sparkles className="h-4 w-4 text-violet-300" />
-              Live demo converter
+              Trình tạo link thử
             </CardTitle>
             <CardDescription>
-              Dán link sản phẩm để tự nhận diện nền tảng và sinh link rút gọn.
+              Dán link sản phẩm để tự nhận diện nền tảng và sinh Link rút gọn.
             </CardDescription>
           </div>
-          <Badge variant={platform ? "success" : "warning"}>
-            {platform ? platform.label : "Chưa nhận diện"}
-          </Badge>
         </div>
       </CardHeader>
 
@@ -106,7 +102,7 @@ export function LinkConverterDemo() {
             ) : (
               <>
                 <Link2 className="mr-2 h-4 w-4" />
-                Tạo link hoàn tiền
+                Tạo link
               </>
             )}
           </Button>
@@ -119,7 +115,7 @@ export function LinkConverterDemo() {
             ) : (
               <>
                 <Copy className="mr-2 h-4 w-4" />
-                Copy link
+                Sao chép link
               </>
             )}
           </Button>
@@ -139,15 +135,18 @@ export function LinkConverterDemo() {
                 Mở thử
               </Button>
             </div>
+            <p className="text-sm font-medium text-emerald-200">
+              Bạn sẽ được hoàn đến 8.5% cho sản phẩm này
+            </p>
             <p className="text-sm text-slate-300">
-              Affiliate URL được sinh theo provider, rồi gắn `short_code` để theo dõi click và
-              conversion.
+              URL tiếp thị được sinh theo nhà cung cấp, rồi gắn `short_code` để theo dõi click và
+              chuyển đổi.
             </p>
           </div>
         ) : (
           <Toast
             title="Chưa nhận diện được nền tảng"
-            description="Hãy thử một link Shopee/Lazada/TikTok Shop/Tiki để xem demo."
+            description="Hãy thử một link Shopee/Lazada/TikTok Shop/Tiki để xem thử."
             variant="error"
           />
         )}
@@ -155,27 +154,27 @@ export function LinkConverterDemo() {
         <div className="grid gap-3 sm:grid-cols-3">
           <Card className="bg-white/[0.03]">
             <CardContent className="px-4 py-4">
-              <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Click</p>
+              <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Lượt click</p>
               <p className="mt-2 text-2xl font-bold text-white">0</p>
             </CardContent>
           </Card>
           <Card className="bg-white/[0.03]">
             <CardContent className="px-4 py-4">
-              <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Conversion</p>
+              <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Lượt chuyển đổi</p>
               <p className="mt-2 text-2xl font-bold text-white">0</p>
             </CardContent>
           </Card>
           <Card className="bg-white/[0.03]">
             <CardContent className="px-4 py-4">
               <p className="text-xs uppercase tracking-[0.24em] text-slate-400">QR Code</p>
-              <p className="mt-2 text-2xl font-bold text-white">Ready</p>
+              <p className="mt-2 text-2xl font-bold text-white">Sẵn sàng</p>
             </CardContent>
           </Card>
         </div>
 
         <p className="text-xs leading-6 text-slate-500">
-          Demo này chỉ mô phỏng luồng UX. Ở sprint sau, nút tạo link sẽ gọi API thật và lưu lịch
-          sử vào database.
+          Màn này chỉ mô phỏng luồng UX. Ở giai đoạn sau, nút tạo link sẽ gọi API thật và lưu lịch
+          sử vào cơ sở dữ liệu.
         </p>
       </CardContent>
     </Card>

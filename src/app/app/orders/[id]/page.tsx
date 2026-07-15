@@ -48,14 +48,11 @@ export default async function OrderDetailPage({ params }: PageProps) {
     <div className="space-y-6">
       <Card className="bg-white/[0.03]">
         <CardHeader>
-          <Badge variant="outline" className="w-fit">
-            Order detail
-          </Badge>
           <CardTitle className="mt-3 text-display text-3xl">
             {resolvedOrder.order_id_external}
           </CardTitle>
           <CardDescription>
-            Chi tiết giao dịch, giá trị đơn, commission và trạng thái xử lý.
+            Chi tiết giao dịch, giá trị đơn, hoa hồng và trạng thái xử lý.
           </CardDescription>
         </CardHeader>
       </Card>
@@ -63,25 +60,25 @@ export default async function OrderDetailPage({ params }: PageProps) {
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         <Card className="bg-white/[0.03]">
           <CardContent className="px-5 py-5">
-            <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Platform</p>
+            <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Nền tảng</p>
             <p className="mt-2 text-lg font-semibold text-white">{resolvedOrder.platform.name}</p>
           </CardContent>
         </Card>
         <Card className="bg-white/[0.03]">
           <CardContent className="px-5 py-5">
-            <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Order value</p>
+            <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Giá trị đơn</p>
             <p className="mt-2 text-lg font-semibold text-white">{formatVnd(resolvedOrder.order_value)}</p>
           </CardContent>
         </Card>
         <Card className="bg-white/[0.03]">
           <CardContent className="px-5 py-5">
-            <p className="text-xs uppercase tracking-[0.24em] text-slate-400">User commission</p>
+            <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Hoa hồng của bạn</p>
             <p className="mt-2 text-lg font-semibold text-white">{formatVnd(resolvedOrder.user_commission)}</p>
           </CardContent>
         </Card>
         <Card className="bg-white/[0.03]">
           <CardContent className="px-5 py-5">
-            <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Status</p>
+            <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Trạng thái</p>
             <div className="mt-2">
               <Badge variant={statusMeta.variant}>{statusMeta.label}</Badge>
             </div>
@@ -91,28 +88,28 @@ export default async function OrderDetailPage({ params }: PageProps) {
 
       <Card className="bg-white/[0.03]">
         <CardHeader>
-          <CardTitle className="text-display text-2xl">Tracking details</CardTitle>
-          <CardDescription>Thông tin click, conversion và audit date.</CardDescription>
+          <CardTitle className="text-display text-2xl">Chi tiết theo dõi</CardTitle>
+          <CardDescription>Thông tin click, conversion và ngày audit.</CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4 md:grid-cols-3">
           <div>
-            <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Click time</p>
+            <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Thời điểm click</p>
             <p className="mt-2 text-sm text-white">
-              {resolvedOrder.click_time ? new Date(resolvedOrder.click_time).toLocaleString("vi-VN") : "N/A"}
+              {resolvedOrder.click_time ? new Date(resolvedOrder.click_time).toLocaleString("vi-VN") : "Không có"}
             </p>
           </div>
           <div>
-            <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Conversion time</p>
+            <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Thời điểm conversion</p>
             <p className="mt-2 text-sm text-white">
               {resolvedOrder.conversion_time
                 ? new Date(resolvedOrder.conversion_time).toLocaleString("vi-VN")
-                : "N/A"}
+                : "Không có"}
             </p>
           </div>
           <div>
-            <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Audit date</p>
+            <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Ngày audit</p>
             <p className="mt-2 text-sm text-white">
-              {resolvedOrder.audit_date ? new Date(resolvedOrder.audit_date).toLocaleDateString("vi-VN") : "N/A"}
+              {resolvedOrder.audit_date ? new Date(resolvedOrder.audit_date).toLocaleDateString("vi-VN") : "Không có"}
             </p>
           </div>
         </CardContent>

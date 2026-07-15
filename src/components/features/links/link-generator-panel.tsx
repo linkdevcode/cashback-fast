@@ -48,6 +48,14 @@ type CreatedLink = RecentLink & {
   platform: PlatformRow;
 };
 
+const quickTags = [
+  { code: "", label: "Auto-detect", tone: "outline" as const, symbol: "A" },
+  { code: "shopee", label: "Shopee", tone: "warning" as const, symbol: "S" },
+  { code: "lazada", label: "Lazada", tone: "info" as const, symbol: "L" },
+  { code: "tiktok", label: "TikTok Shop", tone: "default" as const, symbol: "T" },
+  { code: "tiki", label: "Tiki", tone: "success" as const, symbol: "T" },
+];
+
 export function LinkGeneratorPanel({ platforms, initialLinks }: LinkGeneratorPanelProps) {
   const [input, setInput] = useState("");
   const [selectedPlatform, setSelectedPlatform] = useState("");
@@ -171,7 +179,7 @@ export function LinkGeneratorPanel({ platforms, initialLinks }: LinkGeneratorPan
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-display text-2xl">
             <Link2 className="h-5 w-5 text-violet-300" />
-            Tạo link affiliate
+            Tạo Link tiếp thị
           </CardTitle>
           <CardDescription>
             Dán URL sản phẩm, hệ thống sẽ tự nhận diện nền tảng và tạo short link để bạn chia sẻ.
@@ -204,6 +212,46 @@ export function LinkGeneratorPanel({ platforms, initialLinks }: LinkGeneratorPan
             </Select>
           </label>
 
+          <div className="space-y-2">
+            <span className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-400">
+              Hỗ trợ nhanh
+            </span>
+            <div className="flex flex-wrap gap-2">
+              {quickTags.map((tag) => {
+                const active = selectedPlatform === tag.code || (!selectedPlatform && tag.code === "");
+                return (
+                  <button
+                    key={tag.label}
+                    type="button"
+                    onClick={() => setSelectedPlatform(tag.code)}
+                    className={`inline-flex items-center gap-2 rounded-full border px-3 py-2 text-xs font-semibold transition-colors ${
+                      active
+                        ? "border-violet-500/30 bg-violet-500/15 text-white"
+                        : "border-white/10 bg-white/[0.03] text-slate-300 hover:bg-white/[0.06]"
+                    }`}
+                  >
+                    <span
+                      className={`flex h-5 w-5 items-center justify-center rounded-full text-[10px] font-black ${
+                        tag.tone === "warning"
+                          ? "bg-orange-500/20 text-orange-200"
+                          : tag.tone === "info"
+                            ? "bg-cyan-500/20 text-cyan-200"
+                            : tag.tone === "success"
+                              ? "bg-emerald-500/20 text-emerald-200"
+                              : tag.tone === "default"
+                                ? "bg-fuchsia-500/20 text-fuchsia-200"
+                                : "bg-white/10 text-slate-200"
+                      }`}
+                    >
+                      {tag.symbol}
+                    </span>
+                    {tag.label}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
           <div className="flex flex-wrap items-center gap-3">
             <Button onClick={handleGenerate} disabled={isGenerating}>
               {isGenerating ? (
@@ -214,7 +262,7 @@ export function LinkGeneratorPanel({ platforms, initialLinks }: LinkGeneratorPan
               ) : (
                 <>
                   <Link2 className="mr-2 h-4 w-4" />
-                  Tạo link hoàn tiền
+                  Tạo Link
                 </>
               )}
             </Button>
@@ -223,9 +271,7 @@ export function LinkGeneratorPanel({ platforms, initialLinks }: LinkGeneratorPan
               <Badge variant={activePlatform ? "success" : "outline"}>
                 {activePlatform ? activePlatform.name : "Auto"}
               </Badge>
-              {detectedPlatform ? (
-                <Badge variant="outline">Detected: {detectedPlatform.label}</Badge>
-              ) : null}
+              {detectedPlatform ? <Badge variant="outline">Phát hiện: {detectedPlatform.label}</Badge> : null}
             </div>
           </div>
 
@@ -246,12 +292,12 @@ export function LinkGeneratorPanel({ platforms, initialLinks }: LinkGeneratorPan
                   {copiedCode === result.short_code ? (
                     <>
                       <Check className="mr-2 h-4 w-4" />
-                      Đã copy
+                      Đã sao chép
                     </>
                   ) : (
                     <>
                       <Copy className="mr-2 h-4 w-4" />
-                      Copy
+                      Sao chép
                     </>
                   )}
                 </Button>
@@ -260,26 +306,26 @@ export function LinkGeneratorPanel({ platforms, initialLinks }: LinkGeneratorPan
               <div className="grid gap-3 md:grid-cols-3">
                 <Card className="bg-white/[0.03]">
                   <CardContent className="px-4 py-4">
-                    <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Short code</p>
+                    <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Mã rút gọn</p>
                     <p className="mt-2 font-mono text-sm text-white">{result.short_code}</p>
                   </CardContent>
                 </Card>
                 <Card className="bg-white/[0.03]">
                   <CardContent className="px-4 py-4">
-                    <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Platform</p>
+                    <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Nền tảng</p>
                     <p className="mt-2 text-sm font-semibold text-white">{result.platform.name}</p>
                   </CardContent>
                 </Card>
                 <Card className="bg-white/[0.03]">
                   <CardContent className="px-4 py-4">
-                    <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Destination</p>
+                    <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Điểm đến</p>
                     <a
                       href={result.affiliate_url}
                       target="_blank"
                       rel="noreferrer"
                       className="mt-2 inline-flex items-center gap-2 text-sm font-semibold text-emerald-300"
                     >
-                      Open affiliate URL
+                      Mở URL affiliate
                       <ExternalLink className="h-4 w-4" />
                     </a>
                   </CardContent>
@@ -292,7 +338,7 @@ export function LinkGeneratorPanel({ platforms, initialLinks }: LinkGeneratorPan
 
       <Card className="bg-white/[0.03]">
         <CardHeader>
-          <CardTitle className="text-display text-2xl">Recent links</CardTitle>
+          <CardTitle className="text-display text-2xl">Link gần đây</CardTitle>
           <CardDescription>Hiển thị 50 link gần nhất của user hiện tại.</CardDescription>
         </CardHeader>
         <CardContent>
@@ -306,8 +352,8 @@ export function LinkGeneratorPanel({ platforms, initialLinks }: LinkGeneratorPan
                 <TableHeader>
                   <TableRow>
                     <TableHead>Link</TableHead>
-                    <TableHead>Stats</TableHead>
-                    <TableHead className="text-right">Actions</TableHead>
+                    <TableHead>Thống kê</TableHead>
+                    <TableHead className="text-right">Thao tác</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -334,7 +380,7 @@ export function LinkGeneratorPanel({ platforms, initialLinks }: LinkGeneratorPan
                       <TableCell>
                         <div className="space-y-1 text-sm text-slate-300">
                           <p>Clicks: {link.click_count}</p>
-                          <p>Conversions: {link.conversion_count}</p>
+                          <p>Chuyển đổi: {link.conversion_count}</p>
                         </div>
                       </TableCell>
                       <TableCell>
