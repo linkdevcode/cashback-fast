@@ -1,10 +1,22 @@
-import { FeaturePlaceholder } from "@/components/features/app/feature-placeholder";
+import { WithdrawalsWorkspace } from "@/components/features/withdrawals/withdrawals-workspace";
+import { getWithdrawalsUserAndSupabase, loadWithdrawalsDashboardData } from "@/lib/withdrawals-server";
+import { redirect } from "next/navigation";
 
-export default function WithdrawalsPage() {
+export default async function WithdrawalsPage() {
+  const { supabase, user } = await getWithdrawalsUserAndSupabase();
+
+  if (!user) {
+    redirect("/login?redirect=/app/withdrawals");
+  }
+
+  const { banks, withdrawals, summary, usingDemoData } = await loadWithdrawalsDashboardData(supabase, user.id);
+
   return (
-    <FeaturePlaceholder
-      title="Rút Tiền"
-      description="Trang rút tiền sẽ chứa bank CRUD, form tạo withdrawal và lịch sử xử lý."
+    <WithdrawalsWorkspace
+      banks={banks}
+      withdrawals={withdrawals}
+      summary={summary}
+      usingDemoData={usingDemoData}
     />
   );
 }

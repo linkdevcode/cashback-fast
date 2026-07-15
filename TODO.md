@@ -160,12 +160,14 @@ Checklist theo dõi tiến độ dự án. Cập nhật `[ ]` → `[x]` khi hoà
 
 ### 1.6 Withdrawals (`/app/withdrawals`) — F5
 
-- [ ] API banks: `POST/GET/DELETE /api/v1/banks`
-- [ ] API withdrawals: `POST/GET /api/v1/withdrawals`
-- [ ] Validation: min 50.000đ, max = available balance
-- [ ] UI: balance indicator, bank form/select, amount, submit
-- [ ] Withdrawal history table + status tracking
-- [ ] Rate limit: 5 withdrawals/hour/user
+- [x] API banks: `POST/GET/DELETE /api/v1/banks`
+- [x] API withdrawals: `POST/GET /api/v1/withdrawals`
+- [x] Validation: min 50.000đ, max = available balance
+- [x] UI: balance indicator, bank form/select, amount, submit
+- [x] Withdrawal history table + status tracking
+- [x] Rate limit: 5 withdrawals/hour/user
+
+*Note:* Email notification khi withdrawal status thay đổi sẽ xử lý ở Sprint 2 cùng phần hardening/notifications.
 
 
 
