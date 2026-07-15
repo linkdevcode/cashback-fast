@@ -141,10 +141,10 @@ Checklist theo dõi tiến độ dự án. Cập nhật `[ ]` → `[x]` khi hoà
 
 ### 1.4 Orders (`/app/orders`) — F3
 
-- [ ] API: `GET /api/v1/orders`, `GET /api/v1/orders/stats`, `GET /api/v1/orders/:id`
-- [ ] UI: filter (platform, status, date), search order ID, table + pagination (20/page)
-- [ ] Status badges: Pending / Approved / Rejected
-- [ ] Seed/mock orders để demo UI nếu chưa có webhook
+- [x] API: `GET /api/v1/orders`, `GET /api/v1/orders/stats`, `GET /api/v1/orders/:id`
+- [x] UI: filter (platform, status, date), search order ID, table + pagination (20/page)
+- [x] Status badges: Pending / Approved / Rejected
+- [x] Seed/mock orders để demo UI nếu chưa có webhook
 
 
 
