@@ -130,12 +130,12 @@ Checklist theo dõi tiến độ dự án. Cập nhật `[ ]` → `[x]` khi hoà
 
 ### 1.3 Link generation (`/app/links`) — F2
 
-- [ ] API: `POST/GET/DELETE /api/v1/links` (+ Zod validation)
-- [ ] Auto-detect platform từ URL
-- [ ] Generate short code + lưu `affiliate_links` (mock affiliate URL nếu chưa có AccessTrade)
-- [ ] Redirect short link: `/go/:code` → affiliate URL (+ click count)
-- [ ] UI: URL input, generate CTA, result card (copy), recent links (last 50)
-- [ ] Rate limit in-memory: 30 req/min/user (ARCHITECTURE §8)
+- [x] API: `POST/GET/DELETE /api/v1/links` (+ Zod validation)
+- [x] Auto-detect platform từ URL
+- [x] Generate short code + lưu `affiliate_links` (mock affiliate URL nếu chưa có AccessTrade)
+- [x] Redirect short link: `/go/:code` → affiliate URL (+ click count)
+- [x] UI: URL input, generate CTA, result card (copy), recent links (last 50)
+- [x] Rate limit in-memory: 30 req/min/user (ARCHITECTURE §8)
 
 
 
