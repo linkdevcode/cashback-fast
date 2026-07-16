@@ -193,10 +193,10 @@ Checklist theo dõi tiến độ dự án. Cập nhật `[ ]` → `[x]` khi hoà
 
 ### 2.1 AccessTrade integration
 
-- [ ] Abstract affiliate provider layer (`lib/affiliates/`)
-- [ ] AccessTrade: auth, create tracking link, error handling
-- [ ] Map platform codes ↔ AccessTrade campaigns
-- [ ] Feature flag / fallback mock khi thiếu API key
+- [x] Abstract affiliate provider layer (`lib/affiliates/`)
+- [x] AccessTrade: auth, create tracking link, error handling
+- [x] Map platform codes ↔ AccessTrade campaigns
+- [x] Feature flag / fallback mock khi thiếu API key
 
 
 

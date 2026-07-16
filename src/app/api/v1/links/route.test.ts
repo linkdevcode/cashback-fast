@@ -6,7 +6,7 @@ const mocks = vi.hoisted(() => {
   const rateLimitMock = vi.fn();
   const detectPlatformFromUrlMock = vi.fn();
   const generateShortCodeMock = vi.fn();
-  const createMockAffiliateUrlMock = vi.fn();
+  const createAffiliateLinkMock = vi.fn();
 
   const platformChain = {
     select: vi.fn(() => platformChain),
@@ -41,7 +41,7 @@ const mocks = vi.hoisted(() => {
     rateLimitMock,
     detectPlatformFromUrlMock,
     generateShortCodeMock,
-    createMockAffiliateUrlMock,
+    createAffiliateLinkMock,
     platformChain,
     listChain,
     insertResultChain,
@@ -67,7 +67,10 @@ vi.mock("@/lib/rate-limit", () => ({
 vi.mock("@/lib/links", () => ({
   detectPlatformFromUrl: mocks.detectPlatformFromUrlMock,
   generateShortCode: mocks.generateShortCodeMock,
-  createMockAffiliateUrl: mocks.createMockAffiliateUrlMock,
+}));
+
+vi.mock("@/lib/affiliates", () => ({
+  createAffiliateLink: mocks.createAffiliateLinkMock,
 }));
 
 import { GET, POST } from "./route";
@@ -81,7 +84,7 @@ describe("links API routes", () => {
     mocks.rateLimitMock.mockReset();
     mocks.detectPlatformFromUrlMock.mockReset();
     mocks.generateShortCodeMock.mockReset();
-    mocks.createMockAffiliateUrlMock.mockReset();
+    mocks.createAffiliateLinkMock.mockReset();
 
     mocks.fromMock.mockImplementation((table: string) => {
       if (table === "platforms") {
@@ -143,7 +146,12 @@ describe("links API routes", () => {
     });
     mocks.detectPlatformFromUrlMock.mockReturnValue({ code: "shopee", label: "Shopee" });
     mocks.generateShortCodeMock.mockReturnValue("SHORT123");
-    mocks.createMockAffiliateUrlMock.mockReturnValue("https://accesstrade.example/affiliate");
+    mocks.createAffiliateLinkMock.mockResolvedValue({
+      affiliateUrl: "https://accesstrade.example/affiliate",
+      provider: "accesstrade",
+      campaignId: "campaign-1",
+      fallbackReason: null,
+    });
 
     mocks.platformChain.single.mockResolvedValue({
       data: { id: "platform-1", name: "Shopee", code: "shopee", base_url: "https://shopee.vn" },
@@ -179,7 +187,12 @@ describe("links API routes", () => {
     expect(body.data.short_code).toBe("SHORT123");
     expect(mocks.rateLimitMock).toHaveBeenCalledWith("link:create:user-1", 30, 60 * 1000);
     expect(mocks.detectPlatformFromUrlMock).toHaveBeenCalledWith("https://shopee.vn/product/1");
-    expect(mocks.createMockAffiliateUrlMock).toHaveBeenCalledWith("https://shopee.vn/product/1", "shopee");
+    expect(mocks.createAffiliateLinkMock).toHaveBeenCalledWith({
+      originalUrl: "https://shopee.vn/product/1",
+      platformCode: "shopee",
+      shortCode: "SHORT123",
+      userId: "user-1",
+    });
     expect(mocks.insertResultChain.single).toHaveBeenCalled();
   });
 

@@ -2,10 +2,10 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { createClient } from "@/lib/db/server";
 import {
-  createMockAffiliateUrl,
   detectPlatformFromUrl,
   generateShortCode,
 } from "@/lib/links";
+import { createAffiliateLink } from "@/lib/affiliates";
 import { rateLimit } from "@/lib/rate-limit";
 
 const createLinkSchema = z.object({
@@ -109,8 +109,34 @@ export async function POST(request: Request) {
     );
   }
 
-  const affiliateUrl = createMockAffiliateUrl(url, platformRow.code);
   const shortCode = generateShortCode();
+
+  let affiliateLink: Awaited<ReturnType<typeof createAffiliateLink>> | null = null;
+
+  try {
+    affiliateLink = await createAffiliateLink({
+      originalUrl: url,
+      platformCode: platformRow.code,
+      shortCode,
+      userId: user.id,
+    });
+  } catch (error) {
+    return NextResponse.json(
+      {
+        success: false,
+        error:
+          error instanceof Error ? error.message : "Failed to create affiliate tracking link",
+      },
+      { status: 502 }
+    );
+  }
+
+  if (!affiliateLink) {
+    return NextResponse.json(
+      { success: false, error: "Failed to create affiliate tracking link" },
+      { status: 502 }
+    );
+  }
 
   const { data: link, error } = await supabase
     .from("affiliate_links")
@@ -119,7 +145,7 @@ export async function POST(request: Request) {
       platform_id: platformRow.id,
       original_url: url,
       short_code: shortCode,
-      affiliate_url: affiliateUrl,
+      affiliate_url: affiliateLink.affiliateUrl,
     })
     .select(
       "id, user_id, platform_id, original_url, short_code, affiliate_url, qr_code_url, click_count, conversion_count, created_at"
@@ -139,6 +165,9 @@ export async function POST(request: Request) {
       data: {
         ...link,
         platform: platformRow,
+        affiliate_provider: affiliateLink.provider,
+        affiliate_campaign_id: affiliateLink.campaignId,
+        affiliate_fallback_reason: affiliateLink.fallbackReason,
       },
     },
     { status: 201 }
